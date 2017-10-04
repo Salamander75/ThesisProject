@@ -27,9 +27,6 @@
             prev.className = prev.className.replace(/\bhighlight\b/, '');
             prev = undefined;
         }
-        if (event.currentTarget == modal) {
-            alert(1);
-        }
         if (event.target) {
             prev = event.target;
             prev.className += " highlight";
@@ -37,7 +34,11 @@
     }
 
     function openModalBox(event) {
-
+        var elementUnderInspection = event.target;
+        var id = elementUnderInspection.id;
+        var className = elementUnderInspection.className;
+        var name = elementUnderInspection.name;
+        alert(elementUnderInspection.name);
         modal.style.display = "block";
 
         if (event.target == modal ) {
@@ -149,4 +150,5 @@ function initializeModalBoxes() {
 }
 
 function findSelectorsForSelectedElement() {
+
 }
