@@ -27,6 +27,9 @@
             prev.className = prev.className.replace(/\bhighlight\b/, '');
             prev = undefined;
         }
+        if (event.currentTarget == modal) {
+            alert(1);
+        }
         if (event.target) {
             prev = event.target;
             prev.className += " highlight";
@@ -51,8 +54,17 @@ function initializeModalBoxes() {
 
     var headTag = "document.getElementsByTagName('head')[0]";
     var body = "document.getElementsByTagName('body')[0]";
-    var modalHtml = "<div class='modal-content'><div class='model-header'><span id='closeModalBox' class='close'>&times;</span><h2>Modal Header</h2></div><div class='modal-body'>" +
-        "<p><label for='htmlElementId'>ID: </label><input type='text' name='htmlElementId' id='htmlElementId' /></p><p><label for='htmlElementClass'>ClassName: </label><input type='text' name='htmlElementClass' id='htmlElementClass' /></p></div><div class='modal-footer'><h3>Modal Footer</h3></div></div>";
+    var modalHtml = "<div class='modal-content'><div class='model-header'><span id='closeModalBox' class='close'>&times;</span><h2>Element Inspector</h2></div>"+
+        "<div class='modal-body'>" +
+        "<table>" +
+        "<tr><td><label for='htmlElementNamingDefined'>Element Name: </label></td><td><input type='text' name='htmlElementNamingDefined' id='htmlElementNamingDefined' /></td></tr>" +
+        "<tr><td><label for='htmlElementId'>ID: </label></td><td><input type='text' name='htmlElementId' id='htmlElementId' /></td><td><button type='button' name='selectHtmlElementId' id='selectHtmlElementId' />Select</button></td></tr>"+
+        "<tr><td><label for='htmlElementClass'>ClassName: </label></td><td><input type='text' name='htmlElementClass' id='htmlElementClass' /></td><td><button type='button' name='selectHtmlElementClass' id='selectHtmlElementClass' />Select</button></td></tr>"+
+        "<tr><td><label for='htmlElementCssSelector'>CssSelector: </label></td><td><input type='text' name='htmlElementCssSelector' id='htmlElementCssSelector' /></td><td><button type='button' name='selectHtmlElementCssSelector' id='selectHtmlElementCssSelector' />Select</button></td></tr>" +
+        "<tr><td><label for='htmlElementXPath'>XPath: </label></td><td><input type='text' name='htmlElementXPath' id='htmlElementXPath' /></td><td><button type='button' name='selectHtmlElementXPath' id='selectHtmlElementXPath' />Select</button></td></tr>" +
+        "</table>" +
+        "</div>" +
+        "<div class='modal-footer'><h3>Modal Footer</h3></div></div>";
     var modalDiv = document.createElement('div');
     modalDiv.id = 'elementSelectionArea';
     modalDiv.className = 'modal';
@@ -134,4 +146,7 @@ function initializeModalBoxes() {
     modalStyle.type = 'text/css';
     modalStyle.appendChild(document.createTextNode(modalCss));
     document.head.appendChild(modalStyle);
+}
+
+function findSelectorsForSelectedElement() {
 }
