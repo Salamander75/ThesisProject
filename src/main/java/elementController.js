@@ -1,15 +1,16 @@
+var modal;
+var prev;
 (function() {
     initializeModalBoxes();
-    var modal = document.getElementById('elementSelectionArea');
+    modal = document.getElementById('elementSelectionArea');
     var span = document.getElementById("closeModalBox");
-    var prev;
     var documentBody = document.body;
 
     if (documentBody) {
         documentBody.addEventListener('mouseover', handler, false);
         documentBody.addEventListener('click', openModalBox);
     }
-    else if (documentBody.attachEvent) {
+    else if (documentBody.attachEvent) {               // If browser doesn't support addEventListener
         documentBody.attachEvent('mouseover', function(e) {
             return handler(e || window.event);
         });
@@ -19,15 +20,15 @@
     }
 
     function handler(event) {
-        if (event.target === document.body ||
-            (prev && prev === event.target)) {
-            return;
-        }
+        //      if (event.target === document.body ||
+        //          (prev && prev === event.target)) {
+        //          return;
+        //      }
         if (prev) {
             prev.className = prev.className.replace(/\bhighlight\b/, '');
             prev = undefined;
         }
-        if (event.target) {
+        if (event.target !== modal && !modal.contains(event.target)) {
             prev = event.target;
             prev.className += " highlight";
         }
@@ -35,32 +36,56 @@
 
     function openModalBox(event) {
         var elementUnderInspection = event.target;
-        var id = elementUnderInspection.id;
-        var className = elementUnderInspection.className;
-        var name = elementUnderInspection.name;
-        alert(elementUnderInspection.name);
-        modal.style.display = "block";
-
-        if (event.target == modal ) {
-            modal.style.display = "none";
+        if (event.target !== modal && !modal.contains(event.target)) {
+            document.getElementById('htmlElementId').value = '';
+            document.getElementById('htmlElementClass').value = '';
+            document.getElementById('htmlElementName').value = '';
+            //	clearModalTextInputs();
+            var elementId = elementUnderInspection.id;
+            var elementClass = elementUnderInspection.className.replace(/\bhighlight\b/, '').trim(); // replace given target's highlight class with none
+            var elementName = elementUnderInspection.name;
+            modal.style.display = "block";
+            if (elementId != undefined) {
+                document.getElementById('htmlElementId').value = elementId;
+            }
+            if (elementClass != undefined) {
+                document.getElementById('htmlElementClass').value = elementClass;
+            }
+            if (elementName != undefined) {
+                document.getElementById('htmlElementName').value = elementName;
+            }
+            if (elementUnderInspection == modal ) {
+                modal.style.display = "none";
+            }
         }
-        else if (event.target == span) {
+        if (elementUnderInspection == span) {
             modal.style.display = "none";
         }
     }
 
 })();
 
-function initializeModalBoxes() {
+function clearModalTextInputs() {   // teha hiljem rekursiivselt modaali lahtrite tühjendamine
+    for(var i=0; i<modal.childNodes.length; i++) {   // Siin peab võtma modal child elemendi child elemendid
+        var childElement = modal.childNodes[i];
+        if (childElement.tagName) {
+            if(childElement.type == 'text' && childElement.tagName.toLowerCase() == 'input') {
+                childElement.value = '';
+            }
+        }
+    }
+}
 
+function initializeModalBoxes() {
     var headTag = "document.getElementsByTagName('head')[0]";
     var body = "document.getElementsByTagName('body')[0]";
-    var modalHtml = "<div class='modal-content'><div class='model-header'><span id='closeModalBox' class='close'>&times;</span><h2>Element Inspector</h2></div>"+
+    var modalHtml = "<div id='someId' class='modal-content'><div class='model-header'><span id='closeModalBox' class='close'>&times;</span><h2>Element Inspector</h2></div>"+
         "<div class='modal-body'>" +
         "<table>" +
         "<tr><td><label for='htmlElementNamingDefined'>Element Name: </label></td><td><input type='text' name='htmlElementNamingDefined' id='htmlElementNamingDefined' /></td></tr>" +
         "<tr><td><label for='htmlElementId'>ID: </label></td><td><input type='text' name='htmlElementId' id='htmlElementId' /></td><td><button type='button' name='selectHtmlElementId' id='selectHtmlElementId' />Select</button></td></tr>"+
         "<tr><td><label for='htmlElementClass'>ClassName: </label></td><td><input type='text' name='htmlElementClass' id='htmlElementClass' /></td><td><button type='button' name='selectHtmlElementClass' id='selectHtmlElementClass' />Select</button></td></tr>"+
+        "<tr><td><label for='htmlElementClass'>Name: </label></td><td><input type='text' name='htmlElementName' id='htmlElementName' /></td><td><button type='button' name='selecthtmlElementName' id='selecthtmlElementName' />Select</button></td></tr>"+
         "<tr><td><label for='htmlElementCssSelector'>CssSelector: </label></td><td><input type='text' name='htmlElementCssSelector' id='htmlElementCssSelector' /></td><td><button type='button' name='selectHtmlElementCssSelector' id='selectHtmlElementCssSelector' />Select</button></td></tr>" +
         "<tr><td><label for='htmlElementXPath'>XPath: </label></td><td><input type='text' name='htmlElementXPath' id='htmlElementXPath' /></td><td><button type='button' name='selectHtmlElementXPath' id='selectHtmlElementXPath' />Select</button></td></tr>" +
         "</table>" +
@@ -68,7 +93,7 @@ function initializeModalBoxes() {
         "<div class='modal-footer'><h3>Modal Footer</h3></div></div>";
     var modalDiv = document.createElement('div');
     modalDiv.id = 'elementSelectionArea';
-    modalDiv.className = 'modal';
+    modalDiv.className = 'modal';    // maybe it is needed better class name for uniqnuess
     modalDiv.innerHTML = modalHtml;
 
     document.body.appendChild(modalDiv);
@@ -147,8 +172,4 @@ function initializeModalBoxes() {
     modalStyle.type = 'text/css';
     modalStyle.appendChild(document.createTextNode(modalCss));
     document.head.appendChild(modalStyle);
-}
-
-function findSelectorsForSelectedElement() {
-
 }
