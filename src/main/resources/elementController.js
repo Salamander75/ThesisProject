@@ -100,7 +100,6 @@ function initializeModalBoxes() {
     var modalHtml = "<div id='someId' class='modal-content'><div class='model-header'><span id='closeModalBox' class='close'>&times;</span><h2>Element Inspector</h2></div>"+
         "<div class='modal-body'>" +
         "<table>" +
-        "<tr><td><label for='htmlElementNamingDefined'>Element Name: </label></td><td><input type='text' name='htmlElementNamingDefined' id='htmlElementNamingDefined' /></td></tr>" +
         "<tr><td><label for='htmlElementId'>ID: </label></td><td><input type='text' name='htmlElementId' id='htmlElementId' /></td></tr>"+
         "<tr><td><label for='htmlElementClass'>ClassName: </label></td><td><input type='text' name='htmlElementClass' id='htmlElementClass' /></td></tr>"+
         "<tr><td><label for='htmlElementClass'>Name: </label></td><td><input type='text' name='htmlElementName' id='htmlElementName' /></td></tr>"+
