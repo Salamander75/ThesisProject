@@ -12,7 +12,7 @@
 
     if (documentBody) {
         documentBody.addEventListener('mouseover', handler, false);
-        documentBody.addEventListener('click', openModalBox);
+        documentBody.addEventListener('keydown', KeyPress);
     }
     else if (documentBody.attachEvent) {               // If browser doesn't support addEventListener
         documentBody.attachEvent('mouseover', function (e) {
@@ -31,6 +31,15 @@
         if (event.target !== modal && !modal.contains(event.target)) {
             prev = event.target;
             prev.className += " highlight";
+        }
+    }
+
+    function KeyPress(e) {
+        
+        onmousedown = function(e) {
+            if(e.which == 1) {
+                openModalBox(e);
+            }
         }
     }
 
