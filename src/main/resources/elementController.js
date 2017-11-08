@@ -1,6 +1,7 @@
 (function() {
     initializeModalBoxes();
     var prev;
+    var pressedBoardKey;
     var elementId;
     var elementClass;
     var elementName;
@@ -12,7 +13,8 @@
 
     if (documentBody) {
         documentBody.addEventListener('mouseover', handler, false);
-        documentBody.addEventListener('keydown', KeyPress);
+        documentBody.addEventListener('click', handleMouseClickEvent);
+        documentBody.addEventListener('keydown', handleKeyDownEvent)
     }
     else if (documentBody.attachEvent) {               // If browser doesn't support addEventListener
         documentBody.attachEvent('mouseover', function (e) {
@@ -34,12 +36,17 @@
         }
     }
 
-    function KeyPress(e) {
-        
-        onmousedown = function(e) {
-            if(e.which == 1) {
-                openModalBox(e);
-            }
+    function handleMouseClickEvent(e) {
+        if (pressedBoardKey == 17 && e.which == 1) {
+            e.preventDefault();
+            openModalBox(e);
+            pressedBoardKey = undefined;
+        }
+    }
+
+    function handleKeyDownEvent(e) {
+        if (e.which == 17) {
+            pressedBoardKey = 17;
         }
     }
 
@@ -95,6 +102,10 @@ function createElementObject() {
     gateway.receiveUserSelection(obj);
 }
 
+function closeModal() {
+    document.getElementById('elementSelectionArea').style.display = "none";
+}
+
 function clearModal() {
     document.getElementById('htmlElementId').value = '';
     document.getElementById('htmlElementClass').value = '';
@@ -104,17 +115,36 @@ function clearModal() {
 }
 
 function initializeModalBoxes() {
-    var headTag = "document.getElementsByTagName('head')[0]";
     var body = "document.getElementsByTagName('body')[0]";
-    var modalHtml = "<div id='someId' class='modal-content'><div class='model-header'><span id='closeModalBox' class='close'>&times;</span><h2>Element Inspector</h2></div>"+
+    var modalHtml = "<div id='someId' class='modal-content'>" +
+        "<div class='model-header'>" +
+        "<button id='closeModalBox' onclick='closeModal()' class='close'>&times;</button><h2>Element Inspector</h2>" +
+        "</div>"+
         "<div class='modal-body'>" +
         "<table>" +
-        "<tr><td><label for='htmlElementId'>ID: </label></td><td><input type='text' name='htmlElementId' id='htmlElementId' /></td></tr>"+
-        "<tr><td><label for='htmlElementClass'>ClassName: </label></td><td><input type='text' name='htmlElementClass' id='htmlElementClass' /></td></tr>"+
-        "<tr><td><label for='htmlElementClass'>Name: </label></td><td><input type='text' name='htmlElementName' id='htmlElementName' /></td></tr>"+
-        "<tr><td><label for='htmlElementCssSelector'>CssSelector: </label></td><td><input type='text' name='htmlElementCssSelector' id='htmlElementCssSelector' /></td></tr>" +
-        "<tr><td><label for='htmlElementXPath'>XPath: </label></td><td><input type='text' name='htmlElementXPath' id='htmlElementXPath' /></td></tr>" +
-        "<tr><td><button onclick='createElementObject()'>Select</button></td></tr>" +
+        "<tr>" +
+        "<td><label for='htmlElementId'>ID: </label></td>" +
+        "<td><input type='text' name='htmlElementId' id='htmlElementId' /></td>" +
+        "</tr>"+
+        "<tr>" +
+        "<td><label for='htmlElementClass'>ClassName: </label></td>" +
+        "<td><input type='text' name='htmlElementClass' id='htmlElementClass' /></td>" +
+        "</tr>"+
+        "<tr>" +
+        "<td><label for='htmlElementClass'>Name: </label></td>" +
+        "<td><input type='text' name='htmlElementName' id='htmlElementName' /></td>" +
+        "</tr>"+
+        "<tr>" +
+        "<td><label for='htmlElementCssSelector'>CssSelector: </label></td>" +
+        "<td><input type='text' name='htmlElementCssSelector' id='htmlElementCssSelector' /></td>" +
+        "</tr>" +
+        "<tr>" +
+        "<td><label for='htmlElementXPath'>XPath: </label></td>" +
+        "<td><input type='text' name='htmlElementXPath' id='htmlElementXPath' /></td>" +
+        "</tr>" +
+        "<tr>" +
+        "<td><button onclick='createElementObject()'>Select</button></td>" +
+        "</tr>" +
         "</table>" +
         "</div>" +
         "<div class='modal-footer'><h3>Modal Footer</h3></div></div>";
@@ -170,7 +200,7 @@ function initializeModalBoxes() {
         ".close {\n" +
         "    color: white;\n" +
         "    float: right;\n" +
-        "    font-size: 28px;\n" +
+        "    font-size: 14px;\n" +
         "    font-weight: bold;\n" +
         "}\n" +
         "\n" +
@@ -221,6 +251,7 @@ function generateElementCssSelector(el) {
 
 function myCssSelector(element) {
     if (element.id !== '' && isElementIdUnique(element.id) == true) {
+     //   alert(element.id);
         return '#' + element.id;
     }
     var index= 0;
