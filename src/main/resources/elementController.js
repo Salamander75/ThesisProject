@@ -250,24 +250,40 @@ function generateElementCssSelector(el) {
 }
 
 function myCssSelector(element) {
-    if (element.id !== '' && isElementIdUnique(element.id) == true) {
-     //   alert(element.id);
-        return '#' + element.id;
+    var names = [];
+    while (element.parentNode) {
+        if (element.id) {
+            names.unshift('#'+element.id);
+            break;
+        }
+        alert("TAGI NIMI: " + element.tagName);
+        var sameTagsUnderParentElement = element.parentNode.querySelectorAll(element.tagName).length;
+        var elementParentNodeChildren = element.parentNode.childNodes;
+        var elementTagIndexer = 0;  // If parentNode has multiple tags that target element has, we start indexing
+        for(var i=0; i<elementParentNodeChildren.length; i++) {
+            if (element === elementParentNodeChildren[i]) {
+                if (element.name) {
+                    names.unshift(element.tagName.toLowerCase() + "[name='" + element.name + "']");
+                }else {
+                    if (sameTagsUnderParentElement == 1) names.unshift(element.tagName.toLowerCase());
+                    else names.unshift(element.tagName.toLowerCase()
+                            + ':nth-child(' + elementTagIndexer + ')');
+                }
+                break;
+            } else {
+                if (element.tagName === elementParentNodeChildren[i].tagName
+                    && elementParentNodeChildren[i].nodeType === 1) elementTagIndexer++;
+            }
+        }
+        element = element.parentNode;
     }
-    var index= 0;
-    var siblings= element.parentNode.childNodes;
-    for (var i= 0; i<siblings.length; i++) {
-        var sibling= siblings[i];
-        if (sibling===element)
-            return myCssSelector(element.parentNode)+' > '+element.tagName.toLowerCase() +'['+(index+1)+']';
-        if (sibling.nodeType===1 && sibling.tagName===element.tagName)
-            index++;
-    }
+    return names.join(' > ');
 }
 
 function generateElementXPath(element) {
     var elementTagName = element.tagName.toLowerCase();
-    if (element.id !== '' && isElementIdUnique(element.id) == true) {
+    if (element.getAttribute("id") !== null ) {
+  //  if (element.getAttribute("id") !== null) {
         return '//' + elementTagName + '[@id=\'' + element.id + '\']';
     } else if (element.getAttribute("name") !== null &&
         isElementNameUnique(element.getAttribute("name")) == true) {
@@ -277,19 +293,23 @@ function generateElementXPath(element) {
     if (element===document.body) return element.tagName.toLowerCase();
 
     var index= 0;
-    var siblings= element.parentNode.childNodes;
-    for (var i= 0; i<siblings.length; i++) {
-        var sibling= siblings[i];
-        if (sibling===element)
+    var children= element.parentNode.childNodes;
+    for (var i= 0; i<children.length; i++) {
+        var child= children[i];
+        if (child===element)
             return generateElementXPath(element.parentNode)+'/'+element.tagName.toLowerCase() +'['+(index+1)+']';
-        if (sibling.nodeType===1 && sibling.tagName===element.tagName)
+        if (child.nodeType===1 && child.tagName===element.tagName)   // If same tag exists which has target element, start indexing
             index++;
     }
 }
 
 function isElementIdUnique(id) {
     // Vb vaja täisutada. nt Kui on ka label sama id-ga, et siis seda ei võtaks arvesse
-    if(document.querySelectorAll("[id=" + id + "]").length > 1) return false;
+    if(document.querySelectorAll("[id=" + id + "]").length > 1) {
+        alert(1);
+        alert(document.querySelectorAll("[id=" + id + "]").length);
+        return false;
+    }
     return true;
 }
 
