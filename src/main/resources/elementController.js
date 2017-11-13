@@ -231,34 +231,15 @@ function initializeModalBoxes() {
     document.head.appendChild(modalStyle);
 }
 
-function generateElementCssSelector(el) {
-    var names = [];
-    while (el.parentNode){
-        if (el.id){
-            names.unshift('#'+el.id);
-            break;
-        }else {
-            if (el==el.ownerDocument.documentElement) names.unshift(el.tagName.toLowerCase());
-            else {
-                for (var c=1,e=el;e.previousElementSibling;e=e.previousElementSibling,c++);
-                names.unshift(el.tagName.toLowerCase()+":nth-child("+c+")");
-            }
-            el=el.parentNode;
-        }
-    }
-    return names.join(" > ");
-}
-
 function myCssSelector(element) {
     var names = [];
     while (element.parentNode) {
-        if (element.id) {
+        if (element.id && isElementIdUnique(element.id)) {
             names.unshift('#'+element.id);
             break;
         }
-        alert("TAGI NIMI: " + element.tagName);
-        var sameTagsUnderParentElement = element.parentNode.querySelectorAll(element.tagName).length;
         var elementParentNodeChildren = element.parentNode.childNodes;
+        var sameTagsUnderParentElement = findSameTagOccuranceUnderParentNode(elementParentNodeChildren, element);
         var elementTagIndexer = 0;  // If parentNode has multiple tags that target element has, we start indexing
         for(var i=0; i<elementParentNodeChildren.length; i++) {
             if (element === elementParentNodeChildren[i]) {
@@ -278,6 +259,14 @@ function myCssSelector(element) {
         element = element.parentNode;
     }
     return names.join(' > ');
+}
+
+function findSameTagOccuranceUnderParentNode(parentChildren, targetElement) {
+    var elementOccuranceCounter = 0;
+    for(var i = 0; i < parentChildren.length; i++) {
+        if (parentChildren[i].tagName === targetElement.tagName) elementOccuranceCounter++;
+    }
+    return elementOccuranceCounter;
 }
 
 function generateElementXPath(element) {
@@ -305,15 +294,13 @@ function generateElementXPath(element) {
 
 function isElementIdUnique(id) {
     // Vb vaja täisutada. nt Kui on ka label sama id-ga, et siis seda ei võtaks arvesse
-    if(document.querySelectorAll("[id=" + id + "]").length > 1) {
-        alert(1);
-        alert(document.querySelectorAll("[id=" + id + "]").length);
+    if(document.querySelectorAll('[id="' + id + '"]').length > 1) {
         return false;
     }
     return true;
 }
 
 function isElementNameUnique(name) {
-    if(document.querySelectorAll("[name=" + name + "]").length > 1) return false;
+    if(document.querySelectorAll('[name="' + name + '"]').length > 1) return false;
     return true;
 }
