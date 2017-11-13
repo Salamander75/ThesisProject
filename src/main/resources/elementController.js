@@ -57,7 +57,7 @@
             elementId = elementUnderInspection.id;
             elementClass = elementUnderInspection.className.replace(/\bhighlight\b/, '').trim(); // replace given target's highlight class with none
             elementName = elementUnderInspection.name;
-            elementCssSelector = myCssSelector(elementUnderInspection);
+            elementCssSelector = cssSelectorGenerator(elementUnderInspection);
             elementXPath = generateElementXPath(elementUnderInspection);
             modal.style.display = "block";
             if (elementId != undefined) {
@@ -231,7 +231,7 @@ function initializeModalBoxes() {
     document.head.appendChild(modalStyle);
 }
 
-function myCssSelector(element) {
+function cssSelectorGenerator(element) {
     var names = [];
     while (element.parentNode) {
         if (element.id && isElementIdUnique(element.id)) {
@@ -271,11 +271,10 @@ function findSameTagOccuranceUnderParentNode(parentChildren, targetElement) {
 
 function generateElementXPath(element) {
     var elementTagName = element.tagName.toLowerCase();
-    if (element.getAttribute("id") !== null ) {
-  //  if (element.getAttribute("id") !== null) {
+    if (element.id && isElementIdUnique(element.id)) {
         return '//' + elementTagName + '[@id=\'' + element.id + '\']';
-    } else if (element.getAttribute("name") !== null &&
-        isElementNameUnique(element.getAttribute("name")) == true) {
+    } else if (element.name &&
+        isElementNameUnique(element.name)) {
         return '//' + elementTagName + '[@name=\'' + element.getAttribute("name") + '\']';
     }
 
@@ -293,7 +292,6 @@ function generateElementXPath(element) {
 }
 
 function isElementIdUnique(id) {
-    // Vb vaja täisutada. nt Kui on ka label sama id-ga, et siis seda ei võtaks arvesse
     if(document.querySelectorAll('[id="' + id + '"]').length > 1) {
         return false;
     }
