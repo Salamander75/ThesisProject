@@ -15,6 +15,8 @@ public class ElementModel {
 
     private String xpath;
 
+    private String elementTagName;
+
 
     public String getId() {
         return id;
@@ -54,5 +56,13 @@ public class ElementModel {
 
     public void setXpath(String xpath) {
         this.xpath = xpath;
+    }
+
+    public String getElementTagName() {
+        return elementTagName;
+    }
+
+    public void setElementTagName(String elementTagName) {
+        this.elementTagName = elementTagName;
     }
 }

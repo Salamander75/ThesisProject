@@ -200,5 +200,6 @@ public class Main extends Application {
         elementNameAttrInput.setText(model.getName());
         elementSelectorInput.setText(model.getSelector());
         elementXPathInput.setText(model.getXpath());
+        System.out.println(model.getElementTagName());
     }
 }

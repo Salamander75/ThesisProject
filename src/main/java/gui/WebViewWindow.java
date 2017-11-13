@@ -19,7 +19,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import model.ElementModel;
 import netscape.javascript.JSObject;
-import org.w3c.dom.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -101,9 +100,10 @@ public class WebViewWindow {
                 }
             });
 
-            webEngine.documentProperty().addListener(new ChangeListener<Document>() {
-                @Override public void changed(ObservableValue<? extends Document> prop, Document oldDoc, Document newDoc) {
-                    enableFirebug(webEngine);
+            webEngine.getLoadWorker().exceptionProperty().addListener(new ChangeListener<Throwable>() {
+                @Override
+                public void changed(ObservableValue<? extends Throwable> ov, Throwable t, Throwable t1) {
+                    System.out.println("Received exception: "+t1.getMessage());
                 }
             });
 
@@ -170,10 +170,6 @@ public class WebViewWindow {
 
             return result ;
         }
-
-        private void enableFirebug(final WebEngine engine) {
-     //       engine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
-        }
     }
 
     public class GateWay {
@@ -186,6 +182,7 @@ public class WebViewWindow {
             elementModel.setName(obj.get("name").toString());
             elementModel.setSelector(obj.get("selector").toString());
             elementModel.setXpath(obj.get("xpath").toString());
+            elementModel.setElementTagName(obj.get("tagName").toString().toLowerCase());
             main.receiveElementObject(elementModel);
         }
     }

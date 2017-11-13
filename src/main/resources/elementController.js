@@ -7,6 +7,7 @@
     var elementName;
     var elementCssSelector;
     var elementXPath;
+    var elementTagName;
     var modal = document.getElementById('elementSelectionArea');
     var span = document.getElementById("closeModalBox");
     var documentBody = document.body;
@@ -59,6 +60,7 @@
             elementName = elementUnderInspection.name;
             elementCssSelector = cssSelectorGenerator(elementUnderInspection);
             elementXPath = generateElementXPath(elementUnderInspection);
+            elementTagName = elementUnderInspection.tagName;
             modal.style.display = "block";
             if (elementId != undefined) {
                 document.getElementById('htmlElementId').value = elementId;
@@ -74,6 +76,9 @@
             }
             if (elementXPath != undefined) {
                 document.getElementById('htmlElementXPath').value = elementXPath;
+            }
+            if (elementTagName != undefined) {
+                document.getElementById('elementTagName').value = elementTagName;
             }
             if (elementUnderInspection == modal ) {
                 modal.style.display = "none";
@@ -92,12 +97,14 @@ function createElementObject() {
     var elementName = document.getElementById('htmlElementName').value;
     var elementSelector = document.getElementById('htmlElementCssSelector').value;
     var elementXPath = document.getElementById('htmlElementXPath').value;
+    var elementTagName = document.getElementById('elementTagName').value;
     var obj = '{'
         +'"id" : "' + elementId + '",'
         +'"className"  : "' + elementClassName + '",'
         +'"name" : "' + elementName + '",'
         +'"selector" : "' + elementSelector + '",'
-        +'"xpath" : "' + elementXPath + '"'
+        +'"xpath" : "' + elementXPath + '",'
+        +'"tagName" : "' + elementTagName + '"'
         +'}';
     gateway.receiveUserSelection(obj);
 }
@@ -107,18 +114,17 @@ function closeModal() {
 }
 
 function clearModal() {
-    document.getElementById('htmlElementId').value = '';
-    document.getElementById('htmlElementClass').value = '';
-    document.getElementById('htmlElementName').value = '';
-    document.getElementById('htmlElementCssSelector').value = '';
-    document.getElementById('htmlElementXPath').value = '';
+    var modalChildInputs = document.getElementById('someId').querySelectorAll('input');
+    for(var i=0; i<modalChildInputs.length; i++) {
+        modalChildInputs[i].value = '';
+    }
 }
 
 function initializeModalBoxes() {
     var body = "document.getElementsByTagName('body')[0]";
     var modalHtml = "<div id='someId' class='modal-content'>" +
-        "<div class='model-header'>" +
-        "<button id='closeModalBox' onclick='closeModal()' class='close'>&times;</button><h2>Element Inspector</h2>" +
+        "<div class='modal-header'>" +
+        "<button id='closeModalBox' onclick='closeModal()' class='close'>&times;</button>" +
         "</div>"+
         "<div class='modal-body'>" +
         "<table>" +
@@ -143,17 +149,21 @@ function initializeModalBoxes() {
         "<td><input type='text' name='htmlElementXPath' id='htmlElementXPath' /></td>" +
         "</tr>" +
         "<tr>" +
-        "<td><button onclick='createElementObject()'>Select</button></td>" +
+        "<td><input type='hidden' name='elementTagName' id='elementTagName' /></td>" +
+        "</tr>" +
+        "<tr>" +
+        "<td><button class='inspectionButton' onclick='createElementObject()'>Select</button></td>" +
         "</tr>" +
         "</table>" +
         "</div>" +
-        "<div class='modal-footer'><h3>Modal Footer</h3></div></div>";
+        "<div class='modal-footer'></div></div>";
     var modalDiv = document.createElement('div');
     modalDiv.id = 'elementSelectionArea';
     modalDiv.className = 'modal';    // maybe it is needed better class name for uniqnuess
     modalDiv.innerHTML = modalHtml;
 
     document.body.appendChild(modalDiv);
+
 
     var modalCss = "/* The Modal (background) */\n" +
         ".modal {\n" +
@@ -173,7 +183,7 @@ function initializeModalBoxes() {
         "/* Modal Content */\n" +
         ".modal-content {\n" +
         "    position: relative;\n" +
-        "    background-color: #fefefe;\n" +
+        "    background-color: #e8edf2;\n" +
         "    margin: auto;\n" +
         "    padding: 0;\n" +
         "    border: 1px solid #888;\n" +
@@ -213,7 +223,8 @@ function initializeModalBoxes() {
         "\n" +
         ".modal-header {\n" +
         "    padding: 2px 16px;\n" +
-        "    background-color: #5cb85c;\n" +
+        "    height: 30px;\n" +
+        "    background-color: #9daab7;\n" +
         "    color: white;\n" +
         "}\n" +
         "\n" +
@@ -221,8 +232,34 @@ function initializeModalBoxes() {
         "\n" +
         ".modal-footer {\n" +
         "    padding: 2px 16px;\n" +
-        "    background-color: #5cb85c;\n" +
+        "    height: 30px; \n" +
+        "    background-color: #9daab7;\n" +
         "    color: white;\n" +
+        "} \n" +
+        ".inspectionButton {\n" +
+        "    background: #e8eaeb; \n" +
+        "    background-image: -webkit-linear-gradient(top, #e8eaeb, #82888c); \n" +
+        "    background-image: -moz-linear-gradient(top, #e8eaeb, #82888c); \n" +
+        "    background-image: -ms-linear-gradient(top, #e8eaeb, #82888c); \n" +
+        "    background-image: -o-linear-gradient(top, #e8eaeb, #82888c); \n" +
+        "    background-image: linear-gradient(to bottom, #e8eaeb, #82888c); \n" +
+        "    -webkit-border-radius: 13; \n" +
+        "    -moz-border-radius: 13; \n" +
+        "    border-radius: 13px; \n" +
+        "    font-family: Arial; \n" +
+        "    color: #080108; \n" +
+        "    font-size: 15px; \n" +
+        "    padding: 7px 15px 7px 15px; \n" +
+        "    text-decoration: none; \n" +
+        "} \n" +
+        ".inspectionButton:hover { \n" +
+        "    background: #828a8f; \n" +
+        "    background-image: -webkit-linear-gradient(top, #828a8f, #92999e); \n" +
+        "    background-image: -moz-linear-gradient(top, #828a8f, #92999e); \n" +
+        "    background-image: -ms-linear-gradient(top, #828a8f, #92999e); \n" +
+        "    background-image: -o-linear-gradient(top, #828a8f, #92999e); \n" +
+        "    background-image: linear-gradient(to bottom, #828a8f, #92999e); \n" +
+        "    text-decoration: none; \n" +
         "}";
 
     var modalStyle = document.createElement('style');
@@ -232,10 +269,10 @@ function initializeModalBoxes() {
 }
 
 function cssSelectorGenerator(element) {
-    var names = [];
+    var selectorParts = [];
     while (element.parentNode) {
         if (element.id && isElementIdUnique(element.id)) {
-            names.unshift('#'+element.id);
+            selectorParts.unshift('#'+element.id);
             break;
         }
         var elementParentNodeChildren = element.parentNode.childNodes;
@@ -244,10 +281,10 @@ function cssSelectorGenerator(element) {
         for(var i=0; i<elementParentNodeChildren.length; i++) {
             if (element === elementParentNodeChildren[i]) {
                 if (element.name) {
-                    names.unshift(element.tagName.toLowerCase() + "[name='" + element.name + "']");
+                    selectorParts.unshift(element.tagName.toLowerCase() + "[name='" + element.name + "']");
                 }else {
-                    if (sameTagsUnderParentElement == 1) names.unshift(element.tagName.toLowerCase());
-                    else names.unshift(element.tagName.toLowerCase()
+                    if (sameTagsUnderParentElement == 1) selectorParts.unshift(element.tagName.toLowerCase());
+                    else selectorParts.unshift(element.tagName.toLowerCase()
                             + ':nth-child(' + elementTagIndexer + ')');
                 }
                 break;
@@ -258,7 +295,7 @@ function cssSelectorGenerator(element) {
         }
         element = element.parentNode;
     }
-    return names.join(' > ');
+    return selectorParts.join(' > ');
 }
 
 function findSameTagOccuranceUnderParentNode(parentChildren, targetElement) {
