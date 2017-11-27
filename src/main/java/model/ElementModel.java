@@ -1,9 +1,14 @@
 package model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Karl on 1.11.2017.
  */
 public class ElementModel {
+
+    private String elementUniqueName;
 
     private String id;
 
@@ -17,6 +22,11 @@ public class ElementModel {
 
     private String elementTagName;
 
+    private Map<String, String> selectedAttribute;
+
+    public ElementModel() {
+        this.selectedAttribute = new HashMap<>();
+    }
 
     public String getId() {
         return id;
@@ -64,5 +74,17 @@ public class ElementModel {
 
     public void setElementTagName(String elementTagName) {
         this.elementTagName = elementTagName;
+    }
+
+    public Map<String, String> getSelectedAttribute() {
+        return selectedAttribute;
+    }
+
+    public String getElementUniqueName() {
+        return elementUniqueName;
+    }
+
+    public void setElementUniqueName(String elementUniqueName) {
+        this.elementUniqueName = elementUniqueName;
     }
 }

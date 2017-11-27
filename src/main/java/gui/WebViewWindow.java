@@ -19,6 +19,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import model.ElementModel;
 import netscape.javascript.JSObject;
+import service.DependencyClass;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,16 +35,15 @@ public class WebViewWindow {
     private Scene scene;
     MyBrowser myBrowser;
     private final String viewTitle = "ThesisProject - WebView";
-    private Main main;
+    private IMainViewCenterPanel iMainViewCenterPanel;
 
-    public WebViewWindow(Stage stage, Main main) {
+    public WebViewWindow(Stage stage) {
         this.window = stage;
-        this.main = main;
+        //     this.iMainViewCenterPanel = new MainViewCenterPanel();
     }
 
     public void display() {
         myBrowser = new MyBrowser();
-        //    Stage window = new Stage();
         window.setTitle(viewTitle);
         scene = new Scene(myBrowser, 640, 480);
         window.setScene(scene);
@@ -71,7 +71,7 @@ public class WebViewWindow {
                 e.printStackTrace();
             }
 
-            System.out.println(javascript);
+            //       System.out.println(javascript);
             String script = "var getHeadTag = document.getElementsByTagName('head')[0];" +
                     "var newScriptTag = document.createElement('script');" +
                     "newScriptTag.type='text/javascript';" +
@@ -183,7 +183,10 @@ public class WebViewWindow {
             elementModel.setSelector(obj.get("selector").toString());
             elementModel.setXpath(obj.get("xpath").toString());
             elementModel.setElementTagName(obj.get("tagName").toString().toLowerCase());
-            main.receiveElementObject(elementModel);
+            System.out.println(obj.get("xpath").toString());
+            DependencyClass.getCentralPanel().receiveElementObject(elementModel);
+            //   iMainViewCenterPanel.receiveElementObject(elementModel);
+            //   main.receiveElementObject(elementModel);
         }
     }
 }
