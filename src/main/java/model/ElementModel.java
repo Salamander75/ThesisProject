@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.control.Hyperlink;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +25,8 @@ public class ElementModel {
     private String elementTagName;
 
     private Map<String, String> selectedAttribute;
+
+    private Hyperlink hyperlink;
 
     public ElementModel() {
         this.selectedAttribute = new HashMap<>();
@@ -86,5 +90,13 @@ public class ElementModel {
 
     public void setElementUniqueName(String elementUniqueName) {
         this.elementUniqueName = elementUniqueName;
+    }
+
+    public Hyperlink getHyperlink() {
+        return hyperlink;
+    }
+
+    public void setHyperlink(Hyperlink hyperlink) {
+        this.hyperlink = hyperlink;
     }
 }

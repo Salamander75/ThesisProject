@@ -11,6 +11,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import service.DependencyClass;
+import service.GeneratorService;
 
 /**
  * Created by karl on 23.11.2017.
@@ -51,7 +53,15 @@ public class MainViewTopPanel implements  IMainViewTopPanel{
         Button helpButton = new Button("Help");
         helpButton.setOnAction(e -> HelpModal.display());
 
-        buttonBar.getButtons().addAll(openWebView, helpButton);
+        Button generatePageObjectFile = new Button("Generate");
+        generatePageObjectFile.setOnAction(e -> {
+            GeneratorService generatorService = new GeneratorService();
+            generatorService.
+                    generateJavaPageObjectFile(DependencyClass.getLeftPanel()
+                            .getObservableList());
+        });
+
+        buttonBar.getButtons().addAll(openWebView, helpButton, generatePageObjectFile);
 
         hbox.getChildren().addAll(menuBar, buttonBar);
         hbox.getChildren().add(stackPane);

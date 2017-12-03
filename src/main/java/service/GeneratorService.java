@@ -1,13 +1,12 @@
 package service;
 
 import gui.Main;
+import javafx.collections.ObservableMap;
 
 /**
  * Created by Karl on 15.11.2017.
  */
 public class GeneratorService implements IGeneratorService{
-
-    private Main main;
 
     public GeneratorService () {
     }
@@ -16,7 +15,7 @@ public class GeneratorService implements IGeneratorService{
         return s.replaceAll("\"", "");
     }
 
-    public void validateElementSave() {
+    public void generateJavaPageObjectFile(ObservableMap observableMap) {
 
     }
 }

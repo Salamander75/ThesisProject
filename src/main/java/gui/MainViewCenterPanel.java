@@ -1,10 +1,6 @@
 package gui;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -26,7 +22,8 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
     private TextField elementSelectorInput;
     private TextField elementXPathInput;
     private Button saveElement;
-    private IMainViewLeftPanel iMainViewLeftPanel;
+    private Button removeElement;
+    private Label errorMessage;
     private IGeneratorService iGeneratorService;
     private RadioButton idRadioButton;
     private RadioButton classNameRadioButton;
@@ -34,6 +31,13 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
     private RadioButton selectorRadioButton;
     private RadioButton xpathRadioButton;
     private ElementModel elementModel;
+
+    private final String elementNameNotDefined = "* Save failed. \n Element name must be defined";
+
+    private final String elementSelectorNotSelected = "* Save failed. \n No selector chosen";
+
+    private final String emptySelector = "* Save failed. \n Selector can't be empty";
+
 
     public MainViewCenterPanel () {
         System.out.println("Kood: " + this.hashCode());
@@ -99,9 +103,8 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
         gridPane.add(saveElement, 1, 7);
 
         saveElement.setOnAction(e -> {
-            Hyperlink hyperlink = new Hyperlink("as");
-            DependencyClass.getLeftPanel().addNewElementItem(hyperlink);
-            // TODO: 1) Element name must be defined, else throw error 2) If element with same name already exists, throw error
+            setUpNewElementModel();
+            // TODO: 1) Element name must be defined, else throw error.DONE 2) If element with same name already exists, throw error
             // TODO: 3) If no element is selected, throw error 4) If no elementSelector is selected, throw error
             // TODO: 5) If empty selector is selected, throw error
             if (idRadioButton.isSelected()) {
@@ -112,12 +115,33 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
                 this.elementModel.getSelectedAttribute().put("name", this.elementModel.getName());
             } else if (selectorRadioButton.isSelected()) {
                 this.elementModel.getSelectedAttribute().put("selector", this.elementModel.getSelector());
-            } else {
+            } else if (xpathRadioButton.isSelected()) {
                 this.elementModel.getSelectedAttribute().put("xPath", this.elementModel.getXpath());
             }
             this.elementModel.setElementUniqueName(elementNameInput.getText());
-            //       leftPaneContent.getChildren().addAll(new );
+            if (validateInput()) {
+                DependencyClass.getLeftPanel().addNewElementItem(this.elementModel);
+            }
         });
+
+        removeElement = new Button("Remove");
+        gridPane.add(removeElement, 2, 7);
+        removeElement.setOnAction(e -> {
+            DependencyClass.getLeftPanel().removeElement(getElementNameInput().getText());
+            setElementNameInput(null);
+            setElementIdInput(null);
+            setElementClassInput(null);
+            setElementnameAttrInput(null);
+            setElementSelectorInput(null);
+            setElementXPathInput(null);
+            idRadioButton.setSelected(false);
+            classNameRadioButton.setSelected(false);
+            nameRadioButton.setSelected(false);
+            selectorRadioButton.setSelected(false);
+            xpathRadioButton.setSelected(false);
+            errorMessage.setText("");
+        });
+
 
         final ToggleGroup group = new ToggleGroup();
 
@@ -141,19 +165,112 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
         gridPane.add(xpathRadioButton, 3, 6);
         xpathRadioButton.setToggleGroup(group);
 
+        errorMessage = new Label();
+        errorMessage.setStyle("-fx-text-fill: red;");
+        gridPane.add(errorMessage, 1, 8);
+
         return gridPane;
     }
 
     @Override
     public void receiveElementObject(ElementModel model) {
-        System.out.println("Kood: " + this.hashCode());
-        System.out.println("H>HA>HH>H>H>AA: " + model.getSelector());
         this.elementModel = model;
-        elementIdInput.setText(iGeneratorService.removeDoubleQuotes(model.getId()));
-        elementClassInput.setText(iGeneratorService.removeDoubleQuotes(model.getClassName()));
-        elementNameAttrInput.setText(iGeneratorService.removeDoubleQuotes(model.getName()));
-        elementSelectorInput.setText(iGeneratorService.removeDoubleQuotes(model.getSelector()));
-        elementXPathInput.setText(iGeneratorService.removeDoubleQuotes(model.getXpath()));
+        setElementIdInput(iGeneratorService.removeDoubleQuotes(model.getId()));
+        setElementClassInput(iGeneratorService.removeDoubleQuotes(model.getClassName()));
+        setElementnameAttrInput(iGeneratorService.removeDoubleQuotes(model.getName()));
+        setElementSelectorInput(iGeneratorService.removeDoubleQuotes(model.getSelector()));
+        setElementXPathInput(iGeneratorService.removeDoubleQuotes(model.getXpath()));
         System.out.println(iGeneratorService.removeDoubleQuotes(model.getElementTagName()));
+    }
+
+    public TextField getElementNameInput() {
+        return elementNameInput;
+    }
+
+    public void setElementNameInput(String text) {
+        elementNameInput.setText(text);
+    }
+
+    public TextField getElementIdInput() {
+        return elementIdInput;
+    }
+
+    public void setElementIdInput(String text) {
+        elementIdInput.setText(text);
+    }
+
+    public TextField getElementClassInput() {
+        return elementClassInput;
+    }
+
+    public void setElementClassInput(String text) {
+        elementClassInput.setText(text);
+    }
+
+    public TextField getElementnameAttrInput() {
+        return elementNameAttrInput;
+    }
+
+    public void setElementnameAttrInput(String text) {
+        elementNameAttrInput.setText(text);
+    }
+
+    public TextField getElementSelectorInput() {
+        return elementSelectorInput;
+    }
+
+    public void setElementSelectorInput(String text) {
+        elementSelectorInput.setText(text);
+    }
+
+    public TextField getElementXPathInput() {
+        return elementXPathInput;
+    }
+
+    public void setElementXPathInput(String text) {
+        elementXPathInput.setText(text);
+    }
+
+    public void setSelectedElementRadioButton(String keyword) {
+        if (keyword.equals("id")) {
+            idRadioButton.setSelected(true);
+        }
+        else if (keyword.equals("className")) {
+            classNameRadioButton.setSelected(true);
+        }
+        else if (keyword.equals("name")) {
+            nameRadioButton.setSelected(true);
+        }
+        else if (keyword.equals("selector")) {
+            selectorRadioButton.setSelected(true);
+        }
+        else if (keyword.equals("xPath")) {
+            xpathRadioButton.setSelected(true);
+        }
+    }
+
+    private boolean validateInput() {
+        System.out.println("tekst: " + getElementNameInput().getText());
+        if (getElementNameInput().getText().length() == 0) {
+            System.out.println("outpost 1");
+            errorMessage.setText(elementNameNotDefined);
+            return false;
+        } else if (this.elementModel.getSelectedAttribute().size() == 0) {
+            errorMessage.setText(elementSelectorNotSelected);
+            return false;
+        }
+        System.out.println("key: " + this.elementModel.getSelectedAttribute().entrySet().iterator().next().getKey());
+        System.out.println("outpost 2");
+        return true;
+    }
+
+    private void setUpNewElementModel() {
+        this.elementModel = new ElementModel();
+        this.elementModel.setElementUniqueName(elementNameInput.getText());
+        this.elementModel.setId(elementIdInput.getText());
+        this.elementModel.setClassName(elementClassInput.getText());
+        this.elementModel.setName(elementNameAttrInput.getText());
+        this.elementModel.setSelector(elementSelectorInput.getText());
+        this.elementModel.setXpath(elementXPathInput.getText());
     }
 }

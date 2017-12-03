@@ -1,8 +1,6 @@
 package gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
+import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,24 +9,22 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
-import java.util.ArrayList;
-import java.util.List;
+import model.ElementModel;
+import service.DependencyClass;
+import java.util.LinkedHashMap;
 
 /**
  * Created by karl on 23.11.2017.
  */
 public class MainViewLeftPanel implements IMainViewLeftPanel{
 
-    private List<Hyperlink> leftPaneElements = new ArrayList<>();
-    private ObservableList<Hyperlink> observableList;
- //   private HashMap<String, >
-
+    private LinkedHashMap<String, ElementModel> linkedHashMap = new LinkedHashMap<>();
+    private ObservableMap<String, ElementModel> observableMap;
+    private VBox vbox = new VBox();
 
     @Override
     public VBox addLeftPaneVBox() {
 
-        VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
         String cssLayout = "-fx-border-color: black;\n" +
@@ -41,42 +37,58 @@ public class MainViewLeftPanel implements IMainViewLeftPanel{
         title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         vbox.getChildren().add(title);
 
-        observableList = FXCollections.observableList(leftPaneElements);
-        observableList.addListener(new ListChangeListener() {
-
+        observableMap = FXCollections.observableMap(linkedHashMap);
+        observableMap.addListener(new MapChangeListener<String, ElementModel>() {
             @Override
-            public void onChanged(Change change) {
-                System.out.println("Detected a change! ");
+            public void onChanged(Change<? extends String, ? extends ElementModel> change) {
+                System.out.println("HashMap has changed");
             }
         });
-
-        List<Hyperlink> links = new ArrayList<>();
-        links.add(new Hyperlink("Sales"));
-        links.add(new Hyperlink("Marketing"));
-        links.add(new Hyperlink("Distribution"));
-        links.add(new Hyperlink("Costs"));
-
-        for(Hyperlink hyperlink : links) {
-            hyperlink.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent t) {
-                    //     getHostServices().showDocument(hyperlink.getText());
-                    hyperlink.setVisited(false);
-                    System.out.println(hyperlink.getText());
-                }
-            });
-        }
-        for (int i=0; i<links.size(); i++) {
-            VBox.setMargin(links.get(i), new Insets(0, 0, 0, 8));
-            vbox.getChildren().add(links.get(i));
-        }
 
         return vbox;
     }
 
     @Override
-    public void addNewElementItem(Hyperlink hyperlink) {
-        observableList.add(hyperlink);
+    public void addNewElementItem(ElementModel model) {
+
+        if (!observableMap.containsKey(model.getElementUniqueName())) {
+            observableMap.put(model.getElementUniqueName(), model);
+            Hyperlink hyperlink = new Hyperlink(model.getElementUniqueName());
+            model.setHyperlink(hyperlink);
+           // links.add(hyperlink);
+            VBox.setMargin(hyperlink, new Insets(0, 0, 0, 8));
+            hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent t) {
+                    hyperlink.setVisited(false);
+                    System.out.println(hyperlink.getText());
+                    ElementModel model = observableMap.get(hyperlink.getText());
+                    DependencyClass.getCentralPanel().setElementNameInput(model.getElementUniqueName());
+                    DependencyClass.getCentralPanel().setElementIdInput(model.getId());
+                    DependencyClass.getCentralPanel().setElementClassInput(model.getClassName());
+                    DependencyClass.getCentralPanel().setElementnameAttrInput(model.getName());
+                    DependencyClass.getCentralPanel().setElementSelectorInput(model.getSelector());
+                    DependencyClass.getCentralPanel().setElementXPathInput(model.getXpath());
+                    DependencyClass.getCentralPanel().setSelectedElementRadioButton(model.getSelectedAttribute()
+                            .entrySet().iterator().next().getKey());
+                }
+            });
+            vbox.getChildren().add(hyperlink);
+        }
+        System.out.println(observableMap.size());
+    }
+
+    public void removeElement(String key) {
+        vbox.getChildren().remove(observableMap.get(key).getHyperlink());
+        System.out.println(key);
+        observableMap.remove(key);
+
+        System.out.println(observableMap.size());
+
+    }
+
+    public ObservableMap<String, ElementModel> getObservableList() {
+        return observableMap;
     }
 }
