@@ -1,26 +1,18 @@
-package gui;
+package gui.common;
 
+import gui.HelpModal;
+import gui.WebViewWindow;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import service.DependencyClass;
-import service.GeneratorService;
 
-/**
- * Created by karl on 23.11.2017.
- */
-public class MainViewTopPanel implements  IMainViewTopPanel{
+public class CommonTopPanelComponents {
 
-    @Override
-    public HBox populateTopPaneBorder(BorderPane border, StackPane stackPane) {
+    private static Stage webViewWindowStage = new Stage();
+    public HBox getCommonTopPanelGui(BorderPane border) {
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(2, 2, 2, 2));
         hbox.setSpacing(5);
@@ -42,7 +34,7 @@ public class MainViewTopPanel implements  IMainViewTopPanel{
 
         ButtonBar buttonBar = new ButtonBar();
         Button openWebView = new Button("WebView");
-        Stage webViewWindowStage = new Stage();
+
         WebViewWindow webViewWindow = new WebViewWindow(webViewWindowStage);
         openWebView.setOnAction(e -> {
             if(!webViewWindowStage.isShowing()) {
@@ -53,18 +45,9 @@ public class MainViewTopPanel implements  IMainViewTopPanel{
         Button helpButton = new Button("Help");
         helpButton.setOnAction(e -> HelpModal.display());
 
-        Button generatePageObjectFile = new Button("Generate");
-        generatePageObjectFile.setOnAction(e -> {
-            GeneratorService generatorService = new GeneratorService();
-            generatorService.
-                    generateJavaPageObjectFile(DependencyClass.getLeftPanel()
-                            .getObservableList());
-        });
-
-        buttonBar.getButtons().addAll(openWebView, helpButton, generatePageObjectFile);
+        buttonBar.getButtons().addAll(openWebView, helpButton);
 
         hbox.getChildren().addAll(menuBar, buttonBar);
-        hbox.getChildren().add(stackPane);
         return hbox;
     }
 }

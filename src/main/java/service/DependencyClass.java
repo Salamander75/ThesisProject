@@ -1,8 +1,8 @@
 package service;
 
-import gui.MainViewCenterPanel;
-import gui.MainViewLeftPanel;
-import gui.MainViewTopPanel;
+import gui.mainviewpanels.MainViewCenterPanel;
+import gui.mainviewpanels.MainViewLeftPanel;
+import gui.mainviewpanels.MainViewTopPanel;
 import model.ElementModel;
 
 /**

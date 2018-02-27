@@ -1,4 +1,4 @@
-package gui;
+package gui.mainviewpanels;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;

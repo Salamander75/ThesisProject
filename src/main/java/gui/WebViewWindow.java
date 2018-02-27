@@ -35,11 +35,9 @@ public class WebViewWindow {
     private Scene scene;
     MyBrowser myBrowser;
     private final String viewTitle = "ThesisProject - WebView";
-    private IMainViewCenterPanel iMainViewCenterPanel;
 
     public WebViewWindow(Stage stage) {
         this.window = stage;
-        //     this.iMainViewCenterPanel = new MainViewCenterPanel();
     }
 
     public void display() {
@@ -75,7 +73,7 @@ public class WebViewWindow {
             String script = "var getHeadTag = document.getElementsByTagName('head')[0];" +
                     "var newScriptTag = document.createElement('script');" +
                     "newScriptTag.type='text/javascript';" +
-                    "newScriptTag.src="+javascript+";" +
+                    "newScriptTag.src=" + javascript + ";" +
                     "getHeadTag.appendChild(newScriptTag);" +
                     "var css = '.highlight { background-color: yellow; }';" +
                     "var style = document.createElement('style');" +
@@ -164,10 +162,6 @@ public class WebViewWindow {
             confirm.getDialogPane().setContentText(message);
             confirm.getDialogPane().getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
             boolean result = confirm.showAndWait().filter(ButtonType.YES::equals).isPresent();
-
-            // for debugging:
-            System.out.println(result);
-
             return result ;
         }
     }

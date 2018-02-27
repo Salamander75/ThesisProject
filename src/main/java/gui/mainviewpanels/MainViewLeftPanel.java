@@ -1,4 +1,4 @@
-package gui;
+package gui.mainviewpanels;
 
 import javafx.collections.*;
 import javafx.event.ActionEvent;

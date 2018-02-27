@@ -1,6 +1,5 @@
-package gui;
+package gui.mainviewpanels;
 
-import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import model.ElementModel;
 
