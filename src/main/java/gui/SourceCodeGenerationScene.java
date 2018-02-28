@@ -1,10 +1,10 @@
 package gui;
 
-import controller.SceneController;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import service.DependencyClass;
 
 public class SourceCodeGenerationScene {
@@ -14,6 +14,8 @@ public class SourceCodeGenerationScene {
     private static final double sceneHeight = 375;
 
     private HBox topPaneContent;
+    private GridPane centerPaneContent;
+    private VBox rightPaneContent;
 
     private static BorderPane sourceCodeGenerationSceneBorderPane = new BorderPane();
 
@@ -24,10 +26,22 @@ public class SourceCodeGenerationScene {
 
     private SourceCodeGenerationScene() {
         populateTopPaneBorder(sourceCodeGenerationSceneBorderPane);
+        populateCentralPaneBorder(sourceCodeGenerationSceneBorderPane);
+        populateRightPaneBorder(sourceCodeGenerationSceneBorderPane);
     }
 
     private void populateTopPaneBorder(BorderPane border) {
-        topPaneContent = DependencyClass.getTopPanel().populateTopPaneBorder(border, true);
+        topPaneContent = DependencyClass.getMainViewTopPanel().populateTopPaneBorder(border, true);
+    }
+
+    private void populateCentralPaneBorder(BorderPane border) {
+        centerPaneContent = DependencyClass.getGenerationSceneCentralPanel().addCenterPanel();
+        border.setCenter(centerPaneContent);
+    }
+
+    private void populateRightPaneBorder(BorderPane border) {
+        rightPaneContent = DependencyClass.getGenerationSceneRightPanel().addRightPanel();
+        border.setRight(rightPaneContent);
     }
 
     public static Scene getSourceCodeGenerationScene() {

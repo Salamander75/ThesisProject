@@ -1,6 +1,5 @@
 package service;
 
-import gui.Main;
 import javafx.collections.ObservableMap;
 
 /**

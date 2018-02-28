@@ -120,14 +120,14 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
             }
             this.elementModel.setElementUniqueName(elementNameInput.getText());
             if (validateInput()) {
-                DependencyClass.getLeftPanel().addNewElementItem(this.elementModel);
+                DependencyClass.getMainViewLeftPanel().addNewElementItem(this.elementModel);
             }
         });
 
         removeElement = new Button("Remove");
         gridPane.add(removeElement, 2, 7);
         removeElement.setOnAction(e -> {
-            DependencyClass.getLeftPanel().removeElement(getElementNameInput().getText());
+            DependencyClass.getMainViewLeftPanel().removeElement(getElementNameInput().getText());
             setElementNameInput(null);
             setElementIdInput(null);
             setElementClassInput(null);

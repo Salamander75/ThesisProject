@@ -1,5 +1,7 @@
 package service;
 
+import gui.generationviewpanels.GenerationSceneCentralPanel;
+import gui.generationviewpanels.GenerationSceneRightPanel;
 import gui.mainviewpanels.MainViewCenterPanel;
 import gui.mainviewpanels.MainViewLeftPanel;
 import gui.mainviewpanels.MainViewTopPanel;
@@ -16,18 +18,30 @@ public class DependencyClass {
 
     private static MainViewTopPanel topPanel = new MainViewTopPanel();
 
+    private static GenerationSceneCentralPanel generationSceneCentralPanel = new GenerationSceneCentralPanel();
+
+    private static GenerationSceneRightPanel generationSceneRightPanel = new GenerationSceneRightPanel();
+
     private static ElementModel selectedElement = new ElementModel();
 
-    public static MainViewCenterPanel getCentralPanel() {
+    public static MainViewCenterPanel getMainViewCentralPanel() {
         return centralPanel;
     }
 
-    public static MainViewLeftPanel getLeftPanel() {
+    public static MainViewLeftPanel getMainViewLeftPanel() {
         return leftPanel;
     }
 
-    public static MainViewTopPanel getTopPanel() {
+    public static MainViewTopPanel getMainViewTopPanel() {
         return topPanel;
+    }
+
+    public static GenerationSceneCentralPanel getGenerationSceneCentralPanel() {
+        return generationSceneCentralPanel;
+    }
+
+    public static GenerationSceneRightPanel getGenerationSceneRightPanel() {
+        return generationSceneRightPanel;
     }
 
     public static ElementModel getSelectedElement() {

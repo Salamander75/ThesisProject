@@ -29,7 +29,7 @@ public class MainViewScene {
     }
 
     private void populateTopPaneBorder(BorderPane border) {
-        topPaneContent = DependencyClass.getTopPanel().populateTopPaneBorder(border, false);
+        topPaneContent = DependencyClass.getMainViewTopPanel().populateTopPaneBorder(border, false);
     }
 
     private void populateBottomPaneBorder(BorderPane border) {
@@ -38,12 +38,12 @@ public class MainViewScene {
     }
 
     private void populateLeftPaneBorder(BorderPane border) {
-        leftPaneContent = DependencyClass.getLeftPanel().addLeftPaneVBox();
+        leftPaneContent = DependencyClass.getMainViewLeftPanel().addLeftPaneVBox();
         border.setLeft(leftPaneContent);
     }
 
     private void populateCenterPaneBorder(BorderPane border) {
-        centerPaneContent = DependencyClass.getCentralPanel().addCenterPanel();
+        centerPaneContent = DependencyClass.getMainViewCentralPanel().addCenterPanel();
         border.setCenter(centerPaneContent);
     }
 

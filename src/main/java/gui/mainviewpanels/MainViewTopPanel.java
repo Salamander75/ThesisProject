@@ -34,7 +34,7 @@ public class MainViewTopPanel implements IMainViewTopPanel{
                 SceneController.setCurrentScene(SourceCodeGenerationScene.getSourceCodeGenerationScene());
                     GeneratorService generatorService = new GeneratorService();
             generatorService.
-                    generateJavaPageObjectFile(DependencyClass.getLeftPanel()
+                    generateJavaPageObjectFile(DependencyClass.getMainViewLeftPanel()
                             .getObservableList()); });
             hBox.getChildren().add(sourceCodeGenerationButton);
         }

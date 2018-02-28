@@ -64,13 +64,13 @@ public class MainViewLeftPanel implements IMainViewLeftPanel{
                     hyperlink.setVisited(false);
                     System.out.println(hyperlink.getText());
                     ElementModel model = observableMap.get(hyperlink.getText());
-                    DependencyClass.getCentralPanel().setElementNameInput(model.getElementUniqueName());
-                    DependencyClass.getCentralPanel().setElementIdInput(model.getId());
-                    DependencyClass.getCentralPanel().setElementClassInput(model.getClassName());
-                    DependencyClass.getCentralPanel().setElementnameAttrInput(model.getName());
-                    DependencyClass.getCentralPanel().setElementSelectorInput(model.getSelector());
-                    DependencyClass.getCentralPanel().setElementXPathInput(model.getXpath());
-                    DependencyClass.getCentralPanel().setSelectedElementRadioButton(model.getSelectedAttribute()
+                    DependencyClass.getMainViewCentralPanel().setElementNameInput(model.getElementUniqueName());
+                    DependencyClass.getMainViewCentralPanel().setElementIdInput(model.getId());
+                    DependencyClass.getMainViewCentralPanel().setElementClassInput(model.getClassName());
+                    DependencyClass.getMainViewCentralPanel().setElementnameAttrInput(model.getName());
+                    DependencyClass.getMainViewCentralPanel().setElementSelectorInput(model.getSelector());
+                    DependencyClass.getMainViewCentralPanel().setElementXPathInput(model.getXpath());
+                    DependencyClass.getMainViewCentralPanel().setSelectedElementRadioButton(model.getSelectedAttribute()
                             .entrySet().iterator().next().getKey());
                 }
             });

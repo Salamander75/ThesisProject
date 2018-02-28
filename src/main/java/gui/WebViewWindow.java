@@ -178,7 +178,7 @@ public class WebViewWindow {
             elementModel.setXpath(obj.get("xpath").toString());
             elementModel.setElementTagName(obj.get("tagName").toString().toLowerCase());
             System.out.println(obj.get("xpath").toString());
-            DependencyClass.getCentralPanel().receiveElementObject(elementModel);
+            DependencyClass.getMainViewCentralPanel().receiveElementObject(elementModel);
             //   iMainViewCenterPanel.receiveElementObject(elementModel);
             //   main.receiveElementObject(elementModel);
         }
