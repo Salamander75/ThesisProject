@@ -177,10 +177,10 @@ public class WebViewWindow {
             elementModel.setSelector(obj.get("selector").toString());
             elementModel.setXpath(obj.get("xpath").toString());
             elementModel.setElementTagName(obj.get("tagName").toString().toLowerCase());
-            System.out.println(obj.get("xpath").toString());
+            elementModel.setElementTagType(obj.get("tagType").toString().toLowerCase());
+            System.out.println("WEBVIEW TAG: " + elementModel.getElementTagName());
+            System.out.println("WEBVIEW TYPE: " + elementModel.getElementTagType());
             DependencyClass.getMainViewCentralPanel().receiveElementObject(elementModel);
-            //   iMainViewCenterPanel.receiveElementObject(elementModel);
-            //   main.receiveElementObject(elementModel);
         }
     }
 }

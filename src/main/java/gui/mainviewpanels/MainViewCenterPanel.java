@@ -5,6 +5,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import model.SelectorType;
 import model.ElementModel;
 import service.DependencyClass;
 import service.GeneratorService;
@@ -21,6 +22,7 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
     private TextField elementNameAttrInput;
     private TextField elementSelectorInput;
     private TextField elementXPathInput;
+    private Button addNewElement;
     private Button saveElement;
     private Button removeElement;
     private Label errorMessage;
@@ -31,6 +33,7 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
     private RadioButton selectorRadioButton;
     private RadioButton xpathRadioButton;
     private ElementModel elementModel;
+    private boolean isEditMode = false;
 
     private final String elementNameNotDefined = "* Save failed. \n Element name must be defined";
 
@@ -100,23 +103,34 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
         gridPane.add(elementXPathInput, 2, 6);
 
         saveElement = new Button("Save");
+        addNewElement = new Button("Add new");
         gridPane.add(saveElement, 1, 7);
 
+
+        addNewElement.setOnAction(e -> {
+            addNewElementItem();
+        });
+
         saveElement.setOnAction(e -> {
-            setUpNewElementModel();
+      //      setUpNewElementModel();
             // TODO: 1) Element name must be defined, else throw error.DONE 2) If element with same name already exists, throw error
             // TODO: 3) If no element is selected, throw error 4) If no elementSelector is selected, throw error
             // TODO: 5) If empty selector is selected, throw error
             if (idRadioButton.isSelected()) {
-                this.elementModel.getSelectedAttribute().put("id", this.elementModel.getId());
+                this.elementModel.getSelectedLocatorValue().put(SelectorType.ID, this.elementModel.getId());
+                this.elementModel.setSelectedLocatorTag(SelectorType.ID);
             } else if (classNameRadioButton.isSelected()) {
-                this.elementModel.getSelectedAttribute().put("className", this.elementModel.getClassName());
+                this.elementModel.getSelectedLocatorValue().put(SelectorType.CLASS_NAME, this.elementModel.getClassName());
+                this.elementModel.setSelectedLocatorTag(SelectorType.CLASS_NAME);
             } else if (nameRadioButton.isSelected()) {
-                this.elementModel.getSelectedAttribute().put("name", this.elementModel.getName());
+                this.elementModel.getSelectedLocatorValue().put(SelectorType.NAME, this.elementModel.getName());
+                this.elementModel.setSelectedLocatorTag(SelectorType.NAME);
             } else if (selectorRadioButton.isSelected()) {
-                this.elementModel.getSelectedAttribute().put("selector", this.elementModel.getSelector());
+                this.elementModel.getSelectedLocatorValue().put(SelectorType.SELECTOR, this.elementModel.getSelector());
+                this.elementModel.setSelectedLocatorTag(SelectorType.SELECTOR);
             } else if (xpathRadioButton.isSelected()) {
-                this.elementModel.getSelectedAttribute().put("xPath", this.elementModel.getXpath());
+                this.elementModel.getSelectedLocatorValue().put(SelectorType.XPATH, this.elementModel.getXpath());
+                this.elementModel.setSelectedLocatorTag(SelectorType.XPATH);
             }
             this.elementModel.setElementUniqueName(elementNameInput.getText());
             if (validateInput()) {
@@ -174,13 +188,15 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
 
     @Override
     public void receiveElementObject(ElementModel model) {
+        System.out.println("Rodriguez");
         this.elementModel = model;
-        setElementIdInput(iGeneratorService.removeDoubleQuotes(model.getId()));
-        setElementClassInput(iGeneratorService.removeDoubleQuotes(model.getClassName()));
-        setElementnameAttrInput(iGeneratorService.removeDoubleQuotes(model.getName()));
-        setElementSelectorInput(iGeneratorService.removeDoubleQuotes(model.getSelector()));
-        setElementXPathInput(iGeneratorService.removeDoubleQuotes(model.getXpath()));
-        System.out.println(iGeneratorService.removeDoubleQuotes(model.getElementTagName()));
+        System.out.println("receiveElementObject tagType: " + this.elementModel.getElementTagType());
+        setElementIdInput(iGeneratorService.removeDoubleQuotes(this.elementModel.getId()));
+        setElementClassInput(iGeneratorService.removeDoubleQuotes(this.elementModel.getClassName()));
+        setElementnameAttrInput(iGeneratorService.removeDoubleQuotes(this.elementModel.getName()));
+        setElementSelectorInput(iGeneratorService.removeDoubleQuotes(this.elementModel.getSelector()));
+        setElementXPathInput(iGeneratorService.removeDoubleQuotes(this.elementModel.getXpath()));
+        System.out.println("receiveElementObject tagName: " + iGeneratorService.removeDoubleQuotes(this.elementModel.getElementTagName()));
     }
 
     public TextField getElementNameInput() {
@@ -255,22 +271,33 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
             System.out.println("outpost 1");
             errorMessage.setText(elementNameNotDefined);
             return false;
-        } else if (this.elementModel.getSelectedAttribute().size() == 0) {
+        } else if (this.elementModel.getSelectedLocatorValue().size() == 0) {
             errorMessage.setText(elementSelectorNotSelected);
             return false;
         }
-        System.out.println("key: " + this.elementModel.getSelectedAttribute().entrySet().iterator().next().getKey());
+        System.out.println("key: " + this.elementModel.getSelectedLocatorValue().entrySet().iterator().next().getKey());
         System.out.println("outpost 2");
         return true;
     }
 
-    private void setUpNewElementModel() {
+    private void addNewElementItem() {
+        clearForm();
         this.elementModel = new ElementModel();
-        this.elementModel.setElementUniqueName(elementNameInput.getText());
-        this.elementModel.setId(elementIdInput.getText());
-        this.elementModel.setClassName(elementClassInput.getText());
-        this.elementModel.setName(elementNameAttrInput.getText());
-        this.elementModel.setSelector(elementSelectorInput.getText());
-        this.elementModel.setXpath(elementXPathInput.getText());
     }
+
+    private void clearForm() {
+        setElementNameInput(null);
+        setElementIdInput(null);
+        setElementClassInput(null);
+        setElementnameAttrInput(null);
+        setElementSelectorInput(null);
+        setElementXPathInput(null);
+        idRadioButton.setSelected(false);
+        classNameRadioButton.setSelected(false);
+        nameRadioButton.setSelected(false);
+        selectorRadioButton.setSelected(false);
+        xpathRadioButton.setSelected(false);
+        errorMessage.setText("");
+    }
+
 }

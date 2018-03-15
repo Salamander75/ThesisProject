@@ -11,6 +11,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import model.ElementModel;
 import service.DependencyClass;
+import service.GeneratorService;
+import service.IGeneratorService;
+
 import java.util.LinkedHashMap;
 
 /**
@@ -21,6 +24,11 @@ public class MainViewLeftPanel implements IMainViewLeftPanel{
     private LinkedHashMap<String, ElementModel> linkedHashMap = new LinkedHashMap<>();
     private ObservableMap<String, ElementModel> observableMap;
     private VBox vbox = new VBox();
+    private IGeneratorService iGeneratorService;
+
+    public MainViewLeftPanel() {
+        iGeneratorService = new GeneratorService();
+    }
 
     @Override
     public VBox addLeftPaneVBox() {
@@ -52,6 +60,7 @@ public class MainViewLeftPanel implements IMainViewLeftPanel{
     public void addNewElementItem(ElementModel model) {
 
         if (!observableMap.containsKey(model.getElementUniqueName())) {
+            System.out.println("ITEM ADDER: " + model.getXpath());
             observableMap.put(model.getElementUniqueName(), model);
             Hyperlink hyperlink = new Hyperlink(model.getElementUniqueName());
             model.setHyperlink(hyperlink);
@@ -65,12 +74,12 @@ public class MainViewLeftPanel implements IMainViewLeftPanel{
                     System.out.println(hyperlink.getText());
                     ElementModel model = observableMap.get(hyperlink.getText());
                     DependencyClass.getMainViewCentralPanel().setElementNameInput(model.getElementUniqueName());
-                    DependencyClass.getMainViewCentralPanel().setElementIdInput(model.getId());
-                    DependencyClass.getMainViewCentralPanel().setElementClassInput(model.getClassName());
-                    DependencyClass.getMainViewCentralPanel().setElementnameAttrInput(model.getName());
-                    DependencyClass.getMainViewCentralPanel().setElementSelectorInput(model.getSelector());
-                    DependencyClass.getMainViewCentralPanel().setElementXPathInput(model.getXpath());
-                    DependencyClass.getMainViewCentralPanel().setSelectedElementRadioButton(model.getSelectedAttribute()
+                    DependencyClass.getMainViewCentralPanel().setElementIdInput(iGeneratorService.removeDoubleQuotes(model.getId()));
+                    DependencyClass.getMainViewCentralPanel().setElementClassInput(iGeneratorService.removeDoubleQuotes(model.getClassName()));
+                    DependencyClass.getMainViewCentralPanel().setElementnameAttrInput(iGeneratorService.removeDoubleQuotes(model.getName()));
+                    DependencyClass.getMainViewCentralPanel().setElementSelectorInput(iGeneratorService.removeDoubleQuotes(model.getSelector()));
+                    DependencyClass.getMainViewCentralPanel().setElementXPathInput(iGeneratorService.removeDoubleQuotes(model.getXpath()));
+                    DependencyClass.getMainViewCentralPanel().setSelectedElementRadioButton(model.getSelectedLocatorValue()
                             .entrySet().iterator().next().getKey());
                 }
             });
@@ -90,5 +99,12 @@ public class MainViewLeftPanel implements IMainViewLeftPanel{
 
     public ObservableMap<String, ElementModel> getObservableList() {
         return observableMap;
+    }
+
+    public LinkedHashMap<String, ElementModel> getElementsHashMap() {
+        System.out.println("LINKED HASHMAP GIVER 1: " + linkedHashMap.get("ad").getElementUniqueName());
+        System.out.println("LINKED HASHMAP GIVER 2: " + linkedHashMap.get("ad").getElementTagName());
+        System.out.println("LINKED HASHMAP GIVER 3: " + linkedHashMap.get("ad").getXpath());
+        return linkedHashMap;
     }
 }

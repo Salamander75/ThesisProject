@@ -22,14 +22,18 @@ public class ElementModel {
 
     private String xpath;
 
-    private String elementTagName;
+    private String elementTagName; //  button, a, etc.
 
-    private Map<String, String> selectedAttribute;
+    private Map<String, String> selectedLocatorValue;
 
     private Hyperlink hyperlink;
 
+    private String selectedLocatorTag;
+
+    private String elementTagType;
+
     public ElementModel() {
-        this.selectedAttribute = new HashMap<>();
+        this.selectedLocatorValue = new HashMap<>();
     }
 
     public String getId() {
@@ -80,8 +84,8 @@ public class ElementModel {
         this.elementTagName = elementTagName;
     }
 
-    public Map<String, String> getSelectedAttribute() {
-        return selectedAttribute;
+    public Map<String, String> getSelectedLocatorValue() {
+        return selectedLocatorValue;
     }
 
     public String getElementUniqueName() {
@@ -98,5 +102,21 @@ public class ElementModel {
 
     public void setHyperlink(Hyperlink hyperlink) {
         this.hyperlink = hyperlink;
+    }
+
+    public String getSelectedLocatorTag() {
+        return selectedLocatorTag;
+    }
+
+    public void setSelectedLocatorTag(String selectedLocatorTag) {
+        this.selectedLocatorTag = selectedLocatorTag;
+    }
+
+    public String getElementTagType() {
+        return elementTagType;
+    }
+
+    public void setElementTagType(String elementTagType) {
+        this.elementTagType = elementTagType;
     }
 }

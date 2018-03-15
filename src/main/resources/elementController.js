@@ -8,6 +8,7 @@
     var elementCssSelector;
     var elementXPath;
     var elementTagName;
+    var elementTagType;
     var modal = document.getElementById('elementSelectionArea');
     var span = document.getElementById("closeModalBox");
     var documentBody = document.body;
@@ -61,6 +62,7 @@
             elementCssSelector = cssSelectorGenerator(elementUnderInspection);
             elementXPath = generateElementXPath(elementUnderInspection);
             elementTagName = elementUnderInspection.tagName;
+            elementTagType = elementUnderInspection.getAttribute("type");
             modal.style.display = "block";
             if (elementId != undefined) {
                 document.getElementById('htmlElementId').value = elementId;
@@ -80,6 +82,9 @@
             if (elementTagName != undefined) {
                 document.getElementById('elementTagName').value = elementTagName;
             }
+            if (elementTagType != undefined) {
+                document.getElementById('elementTagType').value = elementTagType;
+            }
             if (elementUnderInspection == modal ) {
                 modal.style.display = "none";
             }
@@ -98,15 +103,20 @@ function createElementObject() {
     var elementSelector = document.getElementById('htmlElementCssSelector').value;
     var elementXPath = document.getElementById('htmlElementXPath').value;
     var elementTagName = document.getElementById('elementTagName').value;
+    var elementTagType = document.getElementById('elementTagType').value;
     var obj = '{'
         +'"id" : "' + elementId + '",'
         +'"className"  : "' + elementClassName + '",'
         +'"name" : "' + elementName + '",'
         +'"selector" : "' + elementSelector + '",'
         +'"xpath" : "' + elementXPath + '",'
-        +'"tagName" : "' + elementTagName + '"'
+        +'"tagName" : "' + elementTagName + '",'
+        +'"tagType" : "' + elementTagType + '"'
         +'}';
-    gateway.receiveUserSelection(obj);
+    setTimeout(function() {
+        // we use timeout here, because sometimes there is a bug when data is not sent to front-end, but little delay resolves it
+        gateway.receiveUserSelection(obj);
+    }, 500);
 }
 
 function closeModal() {
@@ -150,6 +160,7 @@ function initializeModalBoxes() {
         "</tr>" +
         "<tr>" +
         "<td><input type='hidden' name='elementTagName' id='elementTagName' /></td>" +
+        "<td><input type='text' name='elementTagType' id='elementTagType' /></td>" +
         "</tr>" +
         "<tr>" +
         "<td><button class='inspectionButton' onclick='createElementObject()'>Select</button></td>" +

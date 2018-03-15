@@ -35,7 +35,7 @@ public class MainViewTopPanel implements IMainViewTopPanel{
                     GeneratorService generatorService = new GeneratorService();
             generatorService.
                     generateJavaPageObjectFile(DependencyClass.getMainViewLeftPanel()
-                            .getObservableList()); });
+                            .getElementsHashMap()); });
             hBox.getChildren().add(sourceCodeGenerationButton);
         }
         return hBox;
