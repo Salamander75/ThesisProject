@@ -21,8 +21,6 @@ import java.util.LinkedHashMap;
  */
 public class MainViewLeftPanel implements IMainViewLeftPanel{
 
-    private LinkedHashMap<String, ElementModel> linkedHashMap = new LinkedHashMap<>();
-    private ObservableMap<String, ElementModel> observableMap;
     private VBox vbox = new VBox();
     private IGeneratorService iGeneratorService;
 
@@ -45,66 +43,15 @@ public class MainViewLeftPanel implements IMainViewLeftPanel{
         title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         vbox.getChildren().add(title);
 
-        observableMap = FXCollections.observableMap(linkedHashMap);
-        observableMap.addListener(new MapChangeListener<String, ElementModel>() {
-            @Override
-            public void onChanged(Change<? extends String, ? extends ElementModel> change) {
-                System.out.println("HashMap has changed");
-            }
-        });
-
         return vbox;
     }
 
     @Override
     public void addNewElementItem(ElementModel model) {
-
-        if (!observableMap.containsKey(model.getElementUniqueName())) {
-            System.out.println("ITEM ADDER: " + model.getXpath());
-            observableMap.put(model.getElementUniqueName(), model);
-            Hyperlink hyperlink = new Hyperlink(model.getElementUniqueName());
-            model.setHyperlink(hyperlink);
-           // links.add(hyperlink);
-            VBox.setMargin(hyperlink, new Insets(0, 0, 0, 8));
-            hyperlink.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent t) {
-                    hyperlink.setVisited(false);
-                    System.out.println(hyperlink.getText());
-                    ElementModel model = observableMap.get(hyperlink.getText());
-                    DependencyClass.getMainViewCentralPanel().setElementNameInput(model.getElementUniqueName());
-                    DependencyClass.getMainViewCentralPanel().setElementIdInput(iGeneratorService.removeDoubleQuotes(model.getId()));
-                    DependencyClass.getMainViewCentralPanel().setElementClassInput(iGeneratorService.removeDoubleQuotes(model.getClassName()));
-                    DependencyClass.getMainViewCentralPanel().setElementnameAttrInput(iGeneratorService.removeDoubleQuotes(model.getName()));
-                    DependencyClass.getMainViewCentralPanel().setElementSelectorInput(iGeneratorService.removeDoubleQuotes(model.getSelector()));
-                    DependencyClass.getMainViewCentralPanel().setElementXPathInput(iGeneratorService.removeDoubleQuotes(model.getXpath()));
-                    DependencyClass.getMainViewCentralPanel().setSelectedElementRadioButton(model.getSelectedLocatorValue()
-                            .entrySet().iterator().next().getKey());
-                }
-            });
-            vbox.getChildren().add(hyperlink);
-        }
-        System.out.println(observableMap.size());
+        vbox.getChildren().add(model.getHyperlink());
     }
 
-    public void removeElement(String key) {
-        vbox.getChildren().remove(observableMap.get(key).getHyperlink());
-        System.out.println(key);
-        observableMap.remove(key);
-
-        System.out.println(observableMap.size());
-
-    }
-
-    public ObservableMap<String, ElementModel> getObservableList() {
-        return observableMap;
-    }
-
-    public LinkedHashMap<String, ElementModel> getElementsHashMap() {
-        System.out.println("LINKED HASHMAP GIVER 1: " + linkedHashMap.get("ad").getElementUniqueName());
-        System.out.println("LINKED HASHMAP GIVER 2: " + linkedHashMap.get("ad").getElementTagName());
-        System.out.println("LINKED HASHMAP GIVER 3: " + linkedHashMap.get("ad").getXpath());
-        return linkedHashMap;
+    public void removeElement(ElementModel model) {
+        vbox.getChildren().remove(model.getHyperlink());
     }
 }

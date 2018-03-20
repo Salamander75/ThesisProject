@@ -1,6 +1,7 @@
 package model;
 
 import javafx.scene.control.Hyperlink;
+import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 /**
  * Created by Karl on 1.11.2017.
  */
+@Data
 public class ElementModel {
 
     private String elementUniqueName;
@@ -22,7 +24,7 @@ public class ElementModel {
 
     private String xpath;
 
-    private String elementTagName; //  button, a, etc.
+    private String elementTagName;
 
     private Map<String, String> selectedLocatorValue;
 
@@ -31,6 +33,8 @@ public class ElementModel {
     private String selectedLocatorTag;
 
     private String elementTagType;
+
+    private boolean elementExistsInElementList;
 
     public ElementModel() {
         this.selectedLocatorValue = new HashMap<>();
@@ -118,5 +122,13 @@ public class ElementModel {
 
     public void setElementTagType(String elementTagType) {
         this.elementTagType = elementTagType;
+    }
+
+    public boolean isElementExistsInElementList() {
+        return elementExistsInElementList;
+    }
+
+    public void setElementExistsInElementList(boolean elementExistsInElementList) {
+        this.elementExistsInElementList = elementExistsInElementList;
     }
 }

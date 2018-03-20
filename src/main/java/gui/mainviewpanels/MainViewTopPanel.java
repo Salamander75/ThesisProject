@@ -32,10 +32,10 @@ public class MainViewTopPanel implements IMainViewTopPanel{
         } else {
             sourceCodeGenerationButton.setOnAction(e -> {
                 SceneController.setCurrentScene(SourceCodeGenerationScene.getSourceCodeGenerationScene());
-                    GeneratorService generatorService = new GeneratorService();
-            generatorService.
-                    generateJavaPageObjectFile(DependencyClass.getMainViewLeftPanel()
-                            .getElementsHashMap()); });
+    //                GeneratorService generatorService = new GeneratorService();
+    //        generatorService.
+    //                generateJavaPageObjectFile(DependencyClass.getMainViewLeftPanel()
+                        /*    .getElementsHashMap()); */});
             hBox.getChildren().add(sourceCodeGenerationButton);
         }
         return hBox;
