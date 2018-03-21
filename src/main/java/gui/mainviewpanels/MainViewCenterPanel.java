@@ -1,6 +1,7 @@
 package gui.mainviewpanels;
 
 import javafx.scene.control.*;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -43,6 +44,8 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
 
     private final String emptySelector = "* Save failed. \n Selector value can't be empty";
 
+    private final String duplicateElement = "* Save failed. \n Element with same already exists";
+
 
     public MainViewCenterPanel () {
         this.iGeneratorService = new GeneratorService();
@@ -57,6 +60,15 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
                 "-fx-border-style: solid;\n" +
                 "-fx-background-color: #FFFFFF;\n";
         gridPane.setStyle(cssLayout);
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPercentWidth(0);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setPercentWidth(30);
+        ColumnConstraints col3 = new ColumnConstraints();
+        col3.setPercentWidth(25);
+        ColumnConstraints col4 = new ColumnConstraints();
+        col4.setPercentWidth(45);
+        gridPane.getColumnConstraints().addAll(col1,col2,col3,col4);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setGridLinesVisible(false);
@@ -144,13 +156,14 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
                     setElementSelectorForm();
                     saveElement.setDisable(true);
                 }
+
+
+                // TODO: 1) Element name must be defined, else throw error.DONE
+                // TODO: 3) If no element is selected, throw error 4) If no elementSelector is selected, throw error
+                // TODO: 5) If empty selector is selected, throw error
+
+                clearForm();
             }
-
-            // TODO: 1) Element name must be defined, else throw error.DONE
-            // TODO: 3) If no element is selected, throw error 4) If no elementSelector is selected, throw error
-            // TODO: 5) If empty selector is selected, throw error
-
-            clearForm();
         });
 
         removeElement = new Button("Remove");
@@ -253,7 +266,12 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
         if (getElementNameInput().getText().length() == 0) {
             errorMessage.setText(elementNameNotDefined);
             return false;
-        } else if (this.elementModel.getSelectedLocatorValue().size() == 0) {
+        } else if (linkedElementsHashMap.containsKey(elementNameInput.getText()) &&
+                !elementModel.isElementExistsInElementList()) {
+            errorMessage.setText(duplicateElement);
+            return false;
+        } else if (!idRadioButton.isSelected() && !classNameRadioButton.isSelected() && !nameRadioButton.isSelected()
+                && !selectorRadioButton.isSelected() && !xpathRadioButton.isSelected()) {
             errorMessage.setText(elementSelectorNotSelected);
             return false;
         } else if (elementIdInput.getText().length() == 0 && idRadioButton.isSelected()) {
@@ -276,12 +294,12 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
     }
 
     private void clearForm() {
-        setElementNameInput(null);
-        setElementIdInput(null);
-        setElementClassInput(null);
-        setElementnameAttrInput(null);
-        setElementSelectorInput(null);
-        setElementXPathInput(null);
+        setElementNameInput("");
+        setElementIdInput("");
+        setElementClassInput("");
+        setElementnameAttrInput("");
+        setElementSelectorInput("");
+        setElementXPathInput("");
         idRadioButton.setSelected(false);
         classNameRadioButton.setSelected(false);
         nameRadioButton.setSelected(false);
