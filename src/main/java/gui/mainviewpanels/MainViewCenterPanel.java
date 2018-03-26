@@ -214,6 +214,7 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
         setElementnameAttrInput(iGeneratorService.removeDoubleQuotes(model.getName()));
         setElementSelectorInput(iGeneratorService.removeDoubleQuotes(model.getSelector()));
         setElementXPathInput(iGeneratorService.removeDoubleQuotes(model.getXpath()));
+
     }
 
     public TextField getElementNameInput() {
@@ -362,6 +363,10 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
 
     public ElementModel getCurrentElementModel() {
         return elementModel;
+    }
+
+    public LinkedHashMap<String, ElementModel> getPageObjectsList() {
+        return linkedElementsHashMap;
     }
 
 }

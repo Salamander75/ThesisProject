@@ -1,5 +1,7 @@
 package service.javabuilder;
 
+import model.SelectorType;
+
 public class JavaBuilder {
 
     private final String clickActivity = "click";
@@ -12,25 +14,22 @@ public class JavaBuilder {
 
     private String pageObjectClassName = "";
 
-    private String methodCode = "";
-
     public JavaBuilder(String pageObjectClassName) {
         this.pageObjectClassName = pageObjectClassName;
         this.pageObjectCode += publicModifier + "class " +
                 this.pageObjectClassName + addClassBeginningCurlyBrackets();
     }
 
-    public JavaBuilder addPublicMethod(String elementName, String tagName, String tagType, String selectedAttributeValue) {
+    public JavaBuilder addPublicMethod(String elementName, String tagName, String tagType,
+                                       String selectedAttributeValue, String elementLocatorTag) {
         String acticitySuffix = getElementActivitySuffix(tagName, tagType);
         String methodSignature = constructMethodSignature(acticitySuffix, elementName);
-        String methodBody = constructMethodBody();
+        String methodBody = constructMethodBody(selectedAttributeValue, elementLocatorTag, acticitySuffix);
         pageObjectCode += methodSignature + methodBody;
         return this;
     }
 
     private String getElementActivitySuffix(String tagName, String tagType) {
-        System.out.println("TAG NAME: " + tagName);
-        System.out.println("TAG TYPE: " + tagType);
         if (tagName.equals("input") && (tagType.equals("button")
                 || tagType.equals("checkbox")
                 || tagType.equals("radio")
@@ -50,15 +49,80 @@ public class JavaBuilder {
     }
 
     private String constructMethodSignature(String acticitySuffix, String elementName) {
-        String methodAccessModifier = "\n public ";
+        String methodAccessModifier = "\n\tpublic ";
         String methodReturnType = pageObjectClassName + " ";
+        String methodParameter = "";
+        if (acticitySuffix.equals(setValueActicity)) methodParameter = "(String value) { \n\t\t";
+        else methodParameter = "() { \n\t\t";
         String methodName = acticitySuffix + elementName.substring(0, 1).toUpperCase()
-                + elementName.substring(1) + "() { \n\t\t";
+                + elementName.substring(1) + methodParameter;
         return methodAccessModifier + methodReturnType + methodName;
     }
 
-    private String constructMethodBody() {
-        return "$(By.id('SomeId')).setValue('Value'); \n\t" + "return this; \n\t" + "}";
+    private String constructMethodBody(String selectedAttributeValue, String elementLocatorTag, String activitySuffix) {
+        String methodBody = "";
+        if (elementLocatorTag.equals(SelectorType.ID)) {
+            methodBody += constructByIdMethodBody(selectedAttributeValue, activitySuffix);
+        } else if (elementLocatorTag.equals(SelectorType.CLASS_NAME)) {
+            methodBody += constructByClassMethodBody(selectedAttributeValue, activitySuffix);
+        } else if (elementLocatorTag.equals(SelectorType.NAME)) {
+            methodBody += constructByNameMethodBody(selectedAttributeValue, activitySuffix);
+        } else if (elementLocatorTag.equals(SelectorType.SELECTOR)) {
+            methodBody += constructByCssSelectorMethodBody(selectedAttributeValue, activitySuffix);
+        } else if (elementLocatorTag.equals(SelectorType.XPATH)) {
+            methodBody += constructByXpathMethodBody(selectedAttributeValue, activitySuffix);
+        }
+        return methodBody + "\n\t\t" + "return this; \n\t" + "}";
+    }
+
+    private String constructByIdMethodBody(String selectedAttributeValue, String activitySuffix) {
+        System.out.println("Suffix: " + activitySuffix);
+        if (activitySuffix.equals(setValueActicity)) {
+            return SelenideSyntaxTags.byId(selectedAttributeValue) + SelenideSyntaxTags.setValueMethod();
+        } else if (activitySuffix.equals(clickActivity)) {
+            return SelenideSyntaxTags.byId(selectedAttributeValue) + SelenideSyntaxTags.setClickMethod();
+        }
+        return "";
+    }
+
+    private String constructByClassMethodBody(String selectedAttributeValue, String activitySuffix) {
+        System.out.println("Suffix: " + activitySuffix);
+        if (activitySuffix.equals(setValueActicity)) {
+            return SelenideSyntaxTags.byClass(selectedAttributeValue) + SelenideSyntaxTags.setValueMethod();
+        } else if (activitySuffix.equals(clickActivity)) {
+            return SelenideSyntaxTags.byClass(selectedAttributeValue) + SelenideSyntaxTags.setClickMethod();
+        }
+        return "";
+    }
+
+    private String constructByNameMethodBody(String selectedAttributeValue, String activitySuffix) {
+        System.out.println("Suffix: " + activitySuffix);
+        if (activitySuffix.equals(setValueActicity)) {
+            return SelenideSyntaxTags.byName(selectedAttributeValue) + SelenideSyntaxTags.setValueMethod();
+        } else if (activitySuffix.equals(clickActivity)) {
+            return SelenideSyntaxTags.byName(selectedAttributeValue) + SelenideSyntaxTags.setClickMethod();
+        }
+        return "";
+    }
+
+    private String constructByCssSelectorMethodBody(String selectedAttributeValue, String activitySuffix) {
+        System.out.println("Suffix: " + activitySuffix);
+        if (activitySuffix.equals(setValueActicity)) {
+            return SelenideSyntaxTags.byCssSelector(selectedAttributeValue) + SelenideSyntaxTags.setValueMethod();
+        } else if (activitySuffix.equals(clickActivity)) {
+            return SelenideSyntaxTags.byCssSelector(selectedAttributeValue) + SelenideSyntaxTags.setClickMethod();
+        }
+        return "";
+    }
+
+    private String constructByXpathMethodBody(String selectedAttributeValue, String activitySuffix) {
+        System.out.println("Suffix: " + activitySuffix);
+        if (activitySuffix.equals(setValueActicity)) {
+            return SelenideSyntaxTags.byXpath(selectedAttributeValue) + SelenideSyntaxTags.setValueMethod();
+        } else if (activitySuffix.equals(clickActivity)) {
+            return SelenideSyntaxTags.byXpath(selectedAttributeValue) + SelenideSyntaxTags.setClickMethod();
+        }
+        return "";
     }
 
     public String buildJavaSourceCode() {

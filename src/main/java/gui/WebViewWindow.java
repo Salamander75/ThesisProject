@@ -36,6 +36,8 @@ public class WebViewWindow {
     MyBrowser myBrowser;
     private final String viewTitle = "ThesisProject - WebView";
 
+    private GateWay gateWay;
+
     public WebViewWindow(Stage stage) {
         this.window = stage;
     }
@@ -85,6 +87,7 @@ public class WebViewWindow {
             webEngine.setJavaScriptEnabled(true);
             webEngine.load("http://www.urbandead.com/");
             String finalScript = script;
+            gateWay = new GateWay();
             webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
                 @Override
                 public void changed(ObservableValue<? extends Worker.State> ov, Worker.State t, Worker.State t1) {
@@ -93,7 +96,7 @@ public class WebViewWindow {
                         webEngine.executeScript(finalScript);
                         System.out.println("OUTPOST");
                         JSObject jsobj = (JSObject) webEngine.executeScript("window");
-                        jsobj.setMember("gateway", new GateWay());
+                        jsobj.setMember("gateway", gateWay);
                     }
                 }
             });

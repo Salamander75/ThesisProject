@@ -61,7 +61,7 @@
             elementName = elementUnderInspection.name;
             elementCssSelector = cssSelectorGenerator(elementUnderInspection);
             elementXPath = generateElementXPath(elementUnderInspection);
-            elementTagName = elementUnderInspection.tagName;
+            elementTagName = elementUnderInspection.nodeName;
             elementTagType = elementUnderInspection.getAttribute("type");
             modal.style.display = "block";
             if (elementId != undefined) {
@@ -287,16 +287,16 @@ function cssSelectorGenerator(element) {
             break;
         }
         var elementParentNodeChildren = element.parentNode.childNodes;
-        var sameTagsUnderParentElement = findSameTagOccuranceUnderParentNode(elementParentNodeChildren, element);
-        var elementTagIndexer = 0;  // If parentNode has multiple tags that target element has, we start indexing
+        var sameTagsUnderParentElement = findSameTagOccuranceUnderParentNode(elementParentNodeChildren, element); // we use nth-type child for same tags
+        var elementTagIndexer = 1;  // If parentNode has multiple tags that target element has, we start indexing
         for(var i=0; i<elementParentNodeChildren.length; i++) {
             if (element === elementParentNodeChildren[i]) {
                 if (element.name) {
                     selectorParts.unshift(element.tagName.toLowerCase() + "[name='" + element.name + "']");
-                }else {
+                } else {
                     if (sameTagsUnderParentElement == 1) selectorParts.unshift(element.tagName.toLowerCase());
                     else selectorParts.unshift(element.tagName.toLowerCase()
-                            + ':nth-child(' + elementTagIndexer + ')');
+                            + ':nth-of-type(' + elementTagIndexer + ')');
                 }
                 break;
             } else {
@@ -326,7 +326,7 @@ function generateElementXPath(element) {
         return '//' + elementTagName + '[@name=\'' + element.getAttribute("name") + '\']';
     }
 
-    if (element===document.body) return element.tagName.toLowerCase();
+    if (element===document.body) return '//' +  element.tagName.toLowerCase();
 
     var index= 0;
     var children= element.parentNode.childNodes;

@@ -8,6 +8,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import service.DependencyClass;
+import service.GeneratorService;
 
 public class GenerationSceneRightPanel implements IGenerationSceneRightPanel {
 
@@ -31,6 +33,11 @@ public class GenerationSceneRightPanel implements IGenerationSceneRightPanel {
         );
 
         Button generateButton = new Button("Generate");
+        generateButton.setOnAction( event -> {
+            GeneratorService generatorService = new GeneratorService();
+            generatorService.
+                    generateJavaPageObjectFile(DependencyClass.getMainViewCentralPanel().getPageObjectsList());
+        });
         vbox.getChildren().addAll(title, cb, generateButton);
         return vbox;
     }
