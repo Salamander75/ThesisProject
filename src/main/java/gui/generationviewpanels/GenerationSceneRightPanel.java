@@ -35,8 +35,9 @@ public class GenerationSceneRightPanel implements IGenerationSceneRightPanel {
         Button generateButton = new Button("Generate");
         generateButton.setOnAction( event -> {
             GeneratorService generatorService = new GeneratorService();
-            generatorService.
+            String pageObjectSourceCode = generatorService.
                     generateJavaPageObjectFile(DependencyClass.getMainViewCentralPanel().getPageObjectsList());
+            DependencyClass.getGenerationSceneCentralPanel().setPageObjectSourceCode(pageObjectSourceCode);
         });
         vbox.getChildren().addAll(title, cb, generateButton);
         return vbox;

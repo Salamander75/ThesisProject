@@ -1,5 +1,6 @@
 package gui.mainviewpanels;
 
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import model.ElementModel;
 
@@ -8,7 +9,7 @@ import model.ElementModel;
  */
 public interface IMainViewLeftPanel {
 
-    VBox addLeftPaneVBox();
+    ScrollPane addLeftPaneVBox();
 
     void addNewElementItem(ElementModel model);
 }

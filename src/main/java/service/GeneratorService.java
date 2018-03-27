@@ -1,11 +1,8 @@
 package service;
 
-import javafx.collections.ObservableMap;
 import model.ElementModel;
 import service.javabuilder.JavaBuilder;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
@@ -23,7 +20,7 @@ public class GeneratorService implements IGeneratorService{
         return s.replaceAll("\"", "");
     }
 
-    public void generateJavaPageObjectFile(LinkedHashMap linkedHashMap) {
+    public String generateJavaPageObjectFile(LinkedHashMap linkedHashMap) {
 
         JavaBuilder javaBuilder = new JavaBuilder("Test");
         this.linkedHashMap = linkedHashMap;
@@ -39,6 +36,8 @@ public class GeneratorService implements IGeneratorService{
             String elementLocatorTag = model.getSelectedLocatorTag();
             javaBuilder.addPublicMethod(elementName, tagName, tagType, selectedAttributeValue, elementLocatorTag);
         }
-        System.out.println(javaBuilder.buildJavaSourceCode());
+        String pageObjectSourceCode = javaBuilder.buildJavaSourceCode();
+        System.out.println(pageObjectSourceCode);
+        return pageObjectSourceCode;
     }
 }

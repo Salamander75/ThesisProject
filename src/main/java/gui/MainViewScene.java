@@ -2,12 +2,14 @@ package gui;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import service.DependencyClass;
 
 public class MainViewScene {
 
     private VBox leftPaneContent;
+    private ScrollPane scrollPane;
     private GridPane centerPaneContent;
     private HBox topPaneContent;
 
@@ -38,8 +40,8 @@ public class MainViewScene {
     }
 
     private void populateLeftPaneBorder(BorderPane border) {
-        leftPaneContent = DependencyClass.getMainViewLeftPanel().addLeftPaneVBox();
-        border.setLeft(leftPaneContent);
+        scrollPane = DependencyClass.getMainViewLeftPanel().addLeftPaneVBox();
+        border.setLeft(scrollPane);
     }
 
     private void populateCenterPaneBorder(BorderPane border) {

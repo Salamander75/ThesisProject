@@ -6,6 +6,12 @@ import javafx.scene.text.Text;
 
 public class GenerationSceneCentralPanel implements IGenerationSceneCentralPanel {
 
+    private String pageObjectSourceCode;
+
+    private Text textAreaLabel;
+
+    private TextArea sourceCodeTextArea;
+
     @Override
     public GridPane addCenterPanel() {
         GridPane gridPane = new GridPane();
@@ -18,11 +24,16 @@ public class GenerationSceneCentralPanel implements IGenerationSceneCentralPanel
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setGridLinesVisible(false);
-        Text textAreaLabel = new Text("Source code");
+        textAreaLabel = new Text("Source code");
         gridPane.add(textAreaLabel,1,1);
-        TextArea textArea = new TextArea();
-        textArea.setPrefHeight(350);
-        gridPane.add(textArea, 1, 2);
+        sourceCodeTextArea = new TextArea();
+        sourceCodeTextArea.setPrefHeight(350);
+        gridPane.add(sourceCodeTextArea, 1, 2);
         return gridPane;
+    }
+
+    public void setPageObjectSourceCode(String pageObjectSourceCode) {
+        this.pageObjectSourceCode = pageObjectSourceCode;
+        sourceCodeTextArea.setText(pageObjectSourceCode);
     }
 }
