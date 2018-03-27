@@ -38,14 +38,15 @@ public class MainViewLeftPanel implements IMainViewLeftPanel{
     @Override
     public ScrollPane addLeftPaneVBox() {
 
+        scrollPane = new ScrollPane();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
         String cssLayout = "-fx-border-color: black;\n" +
                 "-fx-border-insets: 5;\n" +
                 "-fx-border-width: 1;\n" +
                 "-fx-border-style: solid;\n";
-    //    vbox.setStyle(cssLayout);
-        scrollPane = new ScrollPane();
+        scrollPane.setStyle(cssLayout);
+
    //     Text title = new Text("Data");
     //    title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         vbox.getChildren().addAll(scrollPane);
