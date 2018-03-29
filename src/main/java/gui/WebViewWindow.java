@@ -2,8 +2,10 @@ package gui;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,9 +14,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import model.ElementModel;
@@ -35,6 +42,8 @@ public class WebViewWindow {
     private Scene scene;
     MyBrowser myBrowser;
     private final String viewTitle = "ThesisProject - WebView";
+    private Button backButton;
+    private Button forwardButton;
 
     private GateWay gateWay;
 
@@ -56,10 +65,13 @@ public class WebViewWindow {
 
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
+        WebHistory history = webEngine.getHistory();
+
 
         public MyBrowser(){
 
             String javascript = "";
+            toolbar = new HBox();
             try {
                 Scanner sc = new Scanner(new FileInputStream(new File("src/main/resources/elementController.js")));
                 while (sc.hasNext()) {
@@ -104,23 +116,59 @@ public class WebViewWindow {
             webEngine.getLoadWorker().exceptionProperty().addListener(new ChangeListener<Throwable>() {
                 @Override
                 public void changed(ObservableValue<? extends Throwable> ov, Throwable t, Throwable t1) {
-                    System.out.println("Received exception: "+t1.getMessage());
+                    showAlert("Received exception: " + t1.getMessage());
                 }
             });
+
+
 
             webEngine.setOnAlert(e -> showAlert(e.getData()));
             webEngine.setConfirmHandler(message -> showConfirm(message));
 
-            final TextField textField = new TextField ();
-            textField.setPromptText("Hello! Who are?");
+            backButton = new Button();
+            Image imageBack = new Image("file:src/main/resources/backIcon.png",10,10,true,true);
+            backButton.setGraphic(new ImageView(imageBack));
+            backButton.setDisable(true);
 
-            Button buttonEnter = new Button("Enter");
+            backButton.setOnAction(e -> {
+                goBackInHistory();
+            });
+
+            Image imageForward = new Image("file:src/main/resources/forwardIcon.png", 10, 10, true, true);
+            forwardButton = new Button();
+            forwardButton.setGraphic(new ImageView(imageForward));
+            forwardButton.setDisable(true);
+
+            forwardButton.setOnAction(e -> {
+                goForwardInHistory();
+            });
+            final TextField urlBar = new TextField ();
+            urlBar.setPrefWidth(500d);
+            urlBar.setPromptText("Enter URL address... (with http:// or https:// ) and press Enter");
+
+            urlBar.setOnKeyPressed(new EventHandler<KeyEvent>()
+            {
+                @Override
+                public void handle(KeyEvent ke)
+                {
+                    if (ke.getCode().equals(KeyCode.ENTER))
+                    {
+                        System.out.println("history suurus: " + history.getEntries().size());
+                        if (history.getEntries().size() == 1) {
+                            backButton.setDisable(false);
+                        }
+                        webEngine.load(urlBar.getText());
+                    }
+                }
+            });
+       //     double toolBarWidth = toolbar.get
+            Button buttonEnter = new Button("Search");
 
             buttonEnter.setOnAction(new EventHandler<ActionEvent>(){
-
                 @Override
                 public void handle(ActionEvent arg0) {
-                    webEngine.executeScript("updateHello();");
+                    webEngine.getLocation();
+                    webEngine.load(urlBar.getText());
                 }
             });
 
@@ -129,19 +177,19 @@ public class WebViewWindow {
 
                 @Override
                 public void handle(ActionEvent arg0) {
-                    webEngine.executeScript( "clearHello()" );
+                    urlBar.clear();
                 }
             });
 
 
-            toolbar = new HBox();
-            toolbar.setPadding(new Insets(10, 10, 10, 10));
-            toolbar.setSpacing(10);
-            toolbar.setStyle("-fx-background-color: #336699");
-            toolbar.getChildren().addAll(textField, buttonEnter, buttonClear);
 
-            getChildren().add(toolbar);
+            toolbar.setPadding(new Insets(5, 5, 5, 5));
+            toolbar.setSpacing(10);
+            toolbar.setStyle("-fx-background-color: #E6E6E6");
+            toolbar.getChildren().addAll(backButton, forwardButton, urlBar, buttonEnter, buttonClear);
+
             getChildren().add(webView);
+            getChildren().add(toolbar);
         }
 
         @Override
@@ -149,8 +197,9 @@ public class WebViewWindow {
             double w = getWidth();
             double h = getHeight();
             double toolbarHeight = toolbar.prefHeight(w);
-            layoutInArea(webView, 0, 0, w, h-toolbarHeight, 0, HPos.CENTER, VPos.CENTER);
-            layoutInArea(toolbar, 0, h-toolbarHeight, w, toolbarHeight, 0, HPos.CENTER, VPos.CENTER);
+            layoutInArea(toolbar, 0, 0, w, toolbarHeight, 0, HPos.CENTER, VPos.CENTER);
+            layoutInArea(webView, 0, toolbarHeight, w, h-toolbarHeight, 0, HPos.CENTER, VPos.CENTER);
+
         }
 
         private void showAlert(String message) {
@@ -167,7 +216,46 @@ public class WebViewWindow {
             boolean result = confirm.showAndWait().filter(ButtonType.YES::equals).isPresent();
             return result ;
         }
+
+        public void goBackInHistory()
+        {
+            history = webEngine.getHistory();
+            ObservableList<WebHistory.Entry> entryList = history.getEntries();
+            int currentIndex = history.getCurrentIndex();
+
+            Platform.runLater(() ->
+            {
+                if (entryList.size() > 1 && currentIndex > 0) {
+                    history.go(-1);
+                    forwardButton.setDisable(false);
+                } else {
+                    backButton.setDisable(true);
+                    history.go(0);
+                }
+            });
+        }
+
+        public void goForwardInHistory()
+        {
+            history = webEngine.getHistory();
+            ObservableList<WebHistory.Entry> entryList = history.getEntries();
+            int currentIndex = history.getCurrentIndex();
+
+            Platform.runLater(() ->
+            {
+                if (entryList.size() > 1 && currentIndex < entryList.size() - 1) {
+                    backButton.setDisable(false);
+                    history.go(1);
+                } else {
+                    forwardButton.setDisable(true);
+                    history.go(0);
+                }
+            });
+
+        }
     }
+
+
 
     public class GateWay {
         public void receiveUserSelection(String jsObject) {
