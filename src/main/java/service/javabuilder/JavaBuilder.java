@@ -38,7 +38,13 @@ public class JavaBuilder {
             return clickActivity;
         } else if (tagName.equals("a")) {
             return clickActivity;
-        } else if ( tagName.equals("input") && (tagType.equals("text")
+        } else if (tagName.equals("button") && (tagType.equals("")
+                || tagType.equals("button")
+                || tagType.equals("reset"))
+                || tagType.equals("submit")) {
+            return clickActivity;
+        } else if ( tagName.equals("input") && ( tagType.equals("")
+                || tagType.equals("text")
                 || tagType.equals("password")
                 || tagType.equals("search")
                 || tagType.equals("tel")
@@ -126,11 +132,15 @@ public class JavaBuilder {
     }
 
     public String buildJavaSourceCode() {
-        return pageObjectCode;
+        return pageObjectCode + addClassEndCurlyBrackets();
     }
 
     private String addClassBeginningCurlyBrackets() {
-        return " { \n\n" ;
+        return " { \n" ;
+    }
+
+    private String addClassEndCurlyBrackets() {
+        return "\n\n} ";
     }
 
 

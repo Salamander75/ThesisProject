@@ -65,19 +65,24 @@
             elementTagType = elementUnderInspection.getAttribute("type");
             modal.style.display = "block";
             if (elementId != undefined) {
-                document.getElementById('htmlElementId').value = elementId;
+                document.getElementById('htmlElementId').innerHTML = elementId;
+                document.getElementById('hiddenElementId').value = elementId;
             }
             if (elementClass != undefined) {
-                document.getElementById('htmlElementClass').value = elementClass;
+                document.getElementById('htmlElementClass').innerHTML = elementClass;
+                document.getElementById('hiddenElementClass').value = elementClass;
             }
             if (elementName != undefined) {
-                document.getElementById('htmlElementName').value = elementName;
+                document.getElementById('htmlElementName').innerHTML = elementName;
+                document.getElementById('hiddenElementNameAttr').value = elementName;
             }
             if (elementCssSelector != undefined) {
-                document.getElementById('htmlElementCssSelector').value = elementCssSelector;
+                document.getElementById('htmlElementCssSelector').innerHTML = elementCssSelector;
+                document.getElementById('hiddenElementSelector').value = elementCssSelector;
             }
             if (elementXPath != undefined) {
-                document.getElementById('htmlElementXPath').value = elementXPath;
+                document.getElementById('htmlElementXPath').innerHTML = elementXPath;
+                document.getElementById('hiddenElementXPath').value = elementXPath;
             }
             if (elementTagName != undefined) {
                 document.getElementById('elementTagName').value = elementTagName;
@@ -97,11 +102,11 @@
 })();
 
 function createElementObject() {
-    var elementId = document.getElementById('htmlElementId').value;
-    var elementClassName = document.getElementById('htmlElementClass').value;
-    var elementName = document.getElementById('htmlElementName').value;
-    var elementSelector = document.getElementById('htmlElementCssSelector').value;
-    var elementXPath = document.getElementById('htmlElementXPath').value;
+    var elementId = document.getElementById('hiddenElementId').value;
+    var elementClassName = document.getElementById('hiddenElementClass').value;
+    var elementName = document.getElementById('hiddenElementNameAttr').value;
+    var elementSelector = document.getElementById('hiddenElementSelector').value;
+    var elementXPath = document.getElementById('hiddenElementXPath').value;
     var elementTagName = document.getElementById('elementTagName').value;
     var elementTagType = document.getElementById('elementTagType').value;
     var obj = '{'
@@ -131,34 +136,38 @@ function clearModal() {
 }
 
 function initializeModalBoxes() {
-    var body = "document.getElementsByTagName('body')[0]";
-    var modalHtml = "<div id='someId' class='modal-content'>" +
-        "<div class='modal-header'>" +
-        "<button id='closeModalBox' onclick='closeModal()' class='close'>&times;</button>" +
+    var modalHtml = "<div id='someId' class='modal-content-main'>" +
+        "<div class='modal-header-main'>" +
+        "<button id='closeModalBox' onclick='closeModal()' class='close-modalbox-main'>&times;</button>" +
         "</div>"+
-        "<div class='modal-body'>" +
+        "<div class='modal-body-main'>" +
         "<table>" +
         "<tr>" +
-        "<td><label for='htmlElementId'>ID: </label></td>" +
-        "<td><input type='text' name='htmlElementId' id='htmlElementId' /></td>" +
+        "<td style='color: black'><label for='htmlElementId'>ID: </label></td>" +
+        "<td style='color: black' name='htmlElementId' id='htmlElementId'></td>" +
         "</tr>"+
         "<tr>" +
-        "<td><label for='htmlElementClass'>ClassName: </label></td>" +
-        "<td><input type='text' name='htmlElementClass' id='htmlElementClass' /></td>" +
+        "<td style='color: black'><label for='htmlElementClass'>ClassName:</label></td>" +
+        "<td style='color: black' name='htmlElementClass' id='htmlElementClass'></td>" +
         "</tr>"+
         "<tr>" +
-        "<td><label for='htmlElementClass'>Name: </label></td>" +
-        "<td><input type='text' name='htmlElementName' id='htmlElementName' /></td>" +
+        "<td style='color: black'><label for='htmlElementClass'>Name: </label></td>" +
+        "<td style='color: black' name='htmlElementName' id='htmlElementName'></td>" +
         "</tr>"+
         "<tr>" +
-        "<td><label for='htmlElementCssSelector'>CssSelector: </label></td>" +
-        "<td><input type='text' name='htmlElementCssSelector' id='htmlElementCssSelector' /></td>" +
+        "<td style='color: black'><label for='htmlElementCssSelector'>CssSelector: </label></td>" +
+        "<td style='color: black' name='htmlElementCssSelector' id='htmlElementCssSelector'></td>" +
         "</tr>" +
         "<tr>" +
-        "<td><label for='htmlElementXPath'>XPath: </label></td>" +
-        "<td><input type='text' name='htmlElementXPath' id='htmlElementXPath' /></td>" +
+        "<td style='color: black'><label for='htmlElementXPath'>XPath: </label></td>" +
+        "<td style='color: black' name='htmlElementXPath' id='htmlElementXPath'></td>" +
         "</tr>" +
         "<tr>" +
+        "<td><input type='hidden' name='hiddenElementId' id='hiddenElementId' /></td>" +
+        "<td><input type='hidden' name='hiddenElementClass' id='hiddenElementClass' /></td>" +
+        "<td><input type='hidden' name='hiddenElementNameAttr' id='hiddenElementNameAttr' /></td>" +
+        "<td><input type='hidden' name='hiddenElementSelector' id='hiddenElementSelector' /></td>" +
+        "<td><input type='hidden' name='hiddenElementXPath' id='hiddenElementXPath' /></td>" +
         "<td><input type='hidden' name='elementTagName' id='elementTagName' /></td>" +
         "<td><input type='text' name='elementTagType' id='elementTagType' /></td>" +
         "</tr>" +
@@ -167,20 +176,20 @@ function initializeModalBoxes() {
         "</tr>" +
         "</table>" +
         "</div>" +
-        "<div class='modal-footer'></div></div>";
+        "<div class='modal-footer-main'></div></div>";
     var modalDiv = document.createElement('div');
     modalDiv.id = 'elementSelectionArea';
-    modalDiv.className = 'modal';    // maybe it is needed better class name for uniqnuess
+    modalDiv.className = 'modal-elementPicker';    // maybe it is needed better class name for uniqnuess
     modalDiv.innerHTML = modalHtml;
 
     document.body.appendChild(modalDiv);
 
 
     var modalCss = "/* The Modal (background) */\n" +
-        ".modal {\n" +
+        ".modal-elementPicker {\n" +
         "    display: none; /* Hidden by default */\n" +
         "    position: fixed; /* Stay in place */\n" +
-        "    z-index: 1; /* Sit on top */\n" +
+        "    z-index: 9999; /* Sit on top */\n" +
         "    padding-top: 100px; /* Location of the box */\n" +
         "    left: 0;\n" +
         "    top: 0;\n" +
@@ -192,9 +201,10 @@ function initializeModalBoxes() {
         "}\n" +
         "\n" +
         "/* Modal Content */\n" +
-        ".modal-content {\n" +
+        ".modal-content-main {\n" +
         "    position: relative;\n" +
         "    background-color: #e8edf2;\n" +
+        "    overflow:hidden;\n" +
         "    margin: auto;\n" +
         "    padding: 0;\n" +
         "    border: 1px solid #888;\n" +
@@ -218,7 +228,7 @@ function initializeModalBoxes() {
         "}\n" +
         "\n" +
         "/* The Close Button */\n" +
-        ".close {\n" +
+        ".close-modalbox-main {\n" +
         "    color: white;\n" +
         "    float: right;\n" +
         "    font-size: 14px;\n" +
@@ -232,16 +242,16 @@ function initializeModalBoxes() {
         "    cursor: pointer;\n" +
         "}\n" +
         "\n" +
-        ".modal-header {\n" +
+        ".modal-header-main {\n" +
         "    padding: 2px 16px;\n" +
         "    height: 30px;\n" +
         "    background-color: #9daab7;\n" +
         "    color: white;\n" +
         "}\n" +
         "\n" +
-        ".modal-body {padding: 2px 16px;}\n" +
+        ".modal-body-main {padding: 2px 16px;}\n" +
         "\n" +
-        ".modal-footer {\n" +
+        ".modal-footer-main {\n" +
         "    padding: 2px 16px;\n" +
         "    height: 30px; \n" +
         "    background-color: #9daab7;\n" +
@@ -264,7 +274,7 @@ function initializeModalBoxes() {
         "    text-decoration: none; \n" +
         "} \n" +
         ".inspectionButton:hover { \n" +
-        "    background: #828a8f; \n" +
+        "    background: #000000; \n" +
         "    background-image: -webkit-linear-gradient(top, #828a8f, #92999e); \n" +
         "    background-image: -moz-linear-gradient(top, #828a8f, #92999e); \n" +
         "    background-image: -ms-linear-gradient(top, #828a8f, #92999e); \n" +

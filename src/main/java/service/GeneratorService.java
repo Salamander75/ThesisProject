@@ -20,9 +20,9 @@ public class GeneratorService implements IGeneratorService{
         return s.replaceAll("\"", "");
     }
 
-    public String generateJavaPageObjectFile(LinkedHashMap linkedHashMap) {
+    public String generateJavaPageObjectFile(String pageObjectName, LinkedHashMap linkedHashMap) {
 
-        JavaBuilder javaBuilder = new JavaBuilder("Test");
+        JavaBuilder javaBuilder = new JavaBuilder(pageObjectName);
         this.linkedHashMap = linkedHashMap;
 
         Set<String> keys = this.linkedHashMap.keySet();

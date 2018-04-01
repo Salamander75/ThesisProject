@@ -20,6 +20,10 @@ public class SceneController {
         primaryStage.show();
     }
 
+    public static Stage getCurrentStage() {
+        return primaryStage;
+    }
+
 
 
 
