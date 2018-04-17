@@ -53,7 +53,7 @@ public class MainViewScene {
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(top, right, bottom, left));
         hbox.setSpacing(5);
-        hbox.setStyle("-fx-background-color: #336699;");
+        hbox.setStyle("-fx-background-color: #5f495f;");
         return hbox;
     }
 

@@ -1,0 +1,10 @@
+.top-panel-item {
+    -fx-underline: false;
+    -fx-text-fill: #FFFFFF;
+}
+
+.top-panel-item:hover {
+    -fx-underline: false;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #8f7f8f;
+}

@@ -15,7 +15,7 @@
 
     if (documentBody) {
         documentBody.addEventListener('mouseover', handler, false);
-        documentBody.addEventListener('click', handleMouseClickEvent);
+        documentBody.addEventListener('click', handleMouseClickEvent, true);
         documentBody.addEventListener('keydown', handleKeyDownEvent)
     }
     else if (documentBody.attachEvent) {               // If browser doesn't support addEventListener
@@ -41,6 +41,7 @@
     function handleMouseClickEvent(e) {
         if (pressedBoardKey == 17 && e.which == 1) {
             e.preventDefault();
+            e.stopImmediatePropagation();
             openModalBox(e);
             pressedBoardKey = undefined;
         }
@@ -293,7 +294,11 @@ function cssSelectorGenerator(element) {
     var selectorParts = [];
     while (element.parentNode) {
         if (element.id && isElementIdUnique(element.id)) {
-            selectorParts.unshift('#'+element.id);
+            var elementId = element.id.toString();
+            if (elementId.indexOf('.') !== -1) {
+                elementId = elementId.replace(/\./g, "\\\\2e ")    // Selector does not recognize . in id, so it must be replaced with \\2e
+            }
+            selectorParts.unshift('#'+elementId);
             break;
         }
         var elementParentNodeChildren = element.parentNode.childNodes;
@@ -336,16 +341,15 @@ function generateElementXPath(element) {
         return '//' + elementTagName + '[@name=\'' + element.getAttribute("name") + '\']';
     }
 
-    if (element===document.body) return '//' +  element.tagName.toLowerCase();
+    if (element === document.body) return '//' +  element.tagName.toLowerCase();
 
-    var index= 0;
-    var children= element.parentNode.childNodes;
-    for (var i= 0; i<children.length; i++) {
-        var child= children[i];
-        if (child===element)
-            return generateElementXPath(element.parentNode)+'/'+element.tagName.toLowerCase() +'['+(index+1)+']';
-        if (child.nodeType===1 && child.tagName===element.tagName)   // If same tag exists which has target element, start indexing
-            index++;
+    var children = element.parentNode.childNodes;
+    var targetElementSameTagNameCount = countTargetElementTagNameCount(children, element);
+
+    if (targetElementSameTagNameCount[1] > 1) {
+        return generateElementXPath(element.parentNode) + '/' + element.tagName.toLowerCase() + '['+(targetElementSameTagNameCount[0])+']';
+    } else {
+        return generateElementXPath(element.parentNode) + '/' + element.tagName.toLowerCase()
     }
 }
 
@@ -359,4 +363,18 @@ function isElementIdUnique(id) {
 function isElementNameUnique(name) {
     if(document.querySelectorAll('[name="' + name + '"]').length > 1) return false;
     return true;
+}
+
+function countTargetElementTagNameCount(children, element) {
+    var targetElementTagCount = 0;
+    var targetElementIndex = 0;
+    for (var i = 0; i < children.length; i++) {
+        if (children[i] === element) {
+            targetElementTagCount++;
+            targetElementIndex = targetElementTagCount;
+        } else if (children[i].tagName === element.tagName && children[i].nodeType === 1) {
+            targetElementTagCount++;
+        }
+    }
+    return [targetElementIndex, targetElementTagCount];
 }

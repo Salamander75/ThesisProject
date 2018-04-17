@@ -31,4 +31,8 @@ public class SelenideSyntaxTags {
     public static String setClickMethod () {
         return ".click();";
     }
+
+    public static String setSelectMethod() {
+        return ".selectOptionByValue(value);";
+    }
 }

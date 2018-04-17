@@ -10,6 +10,8 @@ public class JavaBuilder {
 
     private final String publicModifier = "public ";
 
+    private final String selectActivity = "select";
+
     private String pageObjectCode = "";
 
     private String pageObjectClassName = "";
@@ -38,6 +40,8 @@ public class JavaBuilder {
             return clickActivity;
         } else if (tagName.equals("a")) {
             return clickActivity;
+        } else if (tagName.equals("select")) {
+            return selectActivity;
         } else if (tagName.equals("button") && (tagType.equals("")
                 || tagType.equals("button")
                 || tagType.equals("reset"))
@@ -58,8 +62,11 @@ public class JavaBuilder {
         String methodAccessModifier = "\n\tpublic ";
         String methodReturnType = pageObjectClassName + " ";
         String methodParameter = "";
-        if (acticitySuffix.equals(setValueActicity)) methodParameter = "(String value) { \n\t\t";
-        else methodParameter = "() { \n\t\t";
+        if (acticitySuffix.equals(setValueActicity)) {
+            methodParameter = "(String value) { \n\t\t";
+        } else if (acticitySuffix.equals(selectActivity)) {
+            methodParameter = "(String value) { \n\t\t";
+        } else methodParameter = "() { \n\t\t";
         String methodName = acticitySuffix + elementName.substring(0, 1).toUpperCase()
                 + elementName.substring(1) + methodParameter;
         return methodAccessModifier + methodReturnType + methodName;
@@ -87,6 +94,8 @@ public class JavaBuilder {
             return SelenideSyntaxTags.byId(selectedAttributeValue) + SelenideSyntaxTags.setValueMethod();
         } else if (activitySuffix.equals(clickActivity)) {
             return SelenideSyntaxTags.byId(selectedAttributeValue) + SelenideSyntaxTags.setClickMethod();
+        } else if (activitySuffix.equals(selectActivity)) {
+            return SelenideSyntaxTags.byId(selectedAttributeValue) + SelenideSyntaxTags.setSelectMethod();
         }
         return "";
     }
@@ -97,6 +106,8 @@ public class JavaBuilder {
             return SelenideSyntaxTags.byClass(selectedAttributeValue) + SelenideSyntaxTags.setValueMethod();
         } else if (activitySuffix.equals(clickActivity)) {
             return SelenideSyntaxTags.byClass(selectedAttributeValue) + SelenideSyntaxTags.setClickMethod();
+        } else if (activitySuffix.equals(selectActivity)) {
+            return SelenideSyntaxTags.byClass(selectedAttributeValue) + SelenideSyntaxTags.setSelectMethod();
         }
         return "";
     }
@@ -107,6 +118,8 @@ public class JavaBuilder {
             return SelenideSyntaxTags.byName(selectedAttributeValue) + SelenideSyntaxTags.setValueMethod();
         } else if (activitySuffix.equals(clickActivity)) {
             return SelenideSyntaxTags.byName(selectedAttributeValue) + SelenideSyntaxTags.setClickMethod();
+        } else if (activitySuffix.equals(selectActivity)) {
+            return SelenideSyntaxTags.byName(selectedAttributeValue) + SelenideSyntaxTags.setSelectMethod();
         }
         return "";
     }
@@ -117,6 +130,8 @@ public class JavaBuilder {
             return SelenideSyntaxTags.byCssSelector(selectedAttributeValue) + SelenideSyntaxTags.setValueMethod();
         } else if (activitySuffix.equals(clickActivity)) {
             return SelenideSyntaxTags.byCssSelector(selectedAttributeValue) + SelenideSyntaxTags.setClickMethod();
+        } else if (activitySuffix.equals(selectActivity)) {
+            return SelenideSyntaxTags.byCssSelector(selectedAttributeValue) + SelenideSyntaxTags.setSelectMethod();
         }
         return "";
     }
@@ -127,6 +142,8 @@ public class JavaBuilder {
             return SelenideSyntaxTags.byXpath(selectedAttributeValue) + SelenideSyntaxTags.setValueMethod();
         } else if (activitySuffix.equals(clickActivity)) {
             return SelenideSyntaxTags.byXpath(selectedAttributeValue) + SelenideSyntaxTags.setClickMethod();
+        } else if (activitySuffix.equals(selectActivity)) {
+            return SelenideSyntaxTags.byXpath(selectedAttributeValue) + SelenideSyntaxTags.setSelectMethod();
         }
         return "";
     }
