@@ -12,6 +12,8 @@ public class JavaBuilder {
 
     private final String selectActivity = "select";
 
+    private final String getActivity = "get";
+
     private String pageObjectCode = "";
 
     private String pageObjectClassName = "";
@@ -54,13 +56,20 @@ public class JavaBuilder {
                 || tagType.equals("tel")
                 || tagType.equals("url"))) {
             return setValueActicity;
+        } else if (tagName.equals("textarea")) {
+            return setValueActicity;
         }
-        return setValueActicity;
+        return getActivity;
     }
 
     private String constructMethodSignature(String acticitySuffix, String elementName) {
         String methodAccessModifier = "\n\tpublic ";
-        String methodReturnType = pageObjectClassName + " ";
+        String methodReturnType = "";
+        if (acticitySuffix.equals(getActivity)) {
+            methodReturnType = "SelenideElement ";
+        } else {
+            methodReturnType = pageObjectClassName + " ";
+        }
         String methodParameter = "";
         if (acticitySuffix.equals(setValueActicity)) {
             methodParameter = "(String value) { \n\t\t";
@@ -85,7 +94,9 @@ public class JavaBuilder {
         } else if (elementLocatorTag.equals(SelectorType.XPATH)) {
             methodBody += constructByXpathMethodBody(selectedAttributeValue, activitySuffix);
         }
-        return methodBody + "\n\t\t" + "return this; \n\t" + "}";
+
+        if (!activitySuffix.equals(getActivity)) return methodBody + "\n\t\t" + "return this; \n\t" + "}";
+        else return "return " + methodBody + "; \n\t" + "}";
     }
 
     private String constructByIdMethodBody(String selectedAttributeValue, String activitySuffix) {
@@ -97,7 +108,7 @@ public class JavaBuilder {
         } else if (activitySuffix.equals(selectActivity)) {
             return SelenideSyntaxTags.byId(selectedAttributeValue) + SelenideSyntaxTags.setSelectMethod();
         }
-        return "";
+        return SelenideSyntaxTags.byId(selectedAttributeValue);
     }
 
     private String constructByClassMethodBody(String selectedAttributeValue, String activitySuffix) {
@@ -109,7 +120,7 @@ public class JavaBuilder {
         } else if (activitySuffix.equals(selectActivity)) {
             return SelenideSyntaxTags.byClass(selectedAttributeValue) + SelenideSyntaxTags.setSelectMethod();
         }
-        return "";
+        return SelenideSyntaxTags.byClass(selectedAttributeValue);
     }
 
     private String constructByNameMethodBody(String selectedAttributeValue, String activitySuffix) {
@@ -121,7 +132,7 @@ public class JavaBuilder {
         } else if (activitySuffix.equals(selectActivity)) {
             return SelenideSyntaxTags.byName(selectedAttributeValue) + SelenideSyntaxTags.setSelectMethod();
         }
-        return "";
+        return SelenideSyntaxTags.byName(selectedAttributeValue);
     }
 
     private String constructByCssSelectorMethodBody(String selectedAttributeValue, String activitySuffix) {
@@ -133,7 +144,7 @@ public class JavaBuilder {
         } else if (activitySuffix.equals(selectActivity)) {
             return SelenideSyntaxTags.byCssSelector(selectedAttributeValue) + SelenideSyntaxTags.setSelectMethod();
         }
-        return "";
+        return SelenideSyntaxTags.byCssSelector(selectedAttributeValue);
     }
 
     private String constructByXpathMethodBody(String selectedAttributeValue, String activitySuffix) {
@@ -145,7 +156,7 @@ public class JavaBuilder {
         } else if (activitySuffix.equals(selectActivity)) {
             return SelenideSyntaxTags.byXpath(selectedAttributeValue) + SelenideSyntaxTags.setSelectMethod();
         }
-        return "";
+        return SelenideSyntaxTags.byXpath(selectedAttributeValue);
     }
 
     public String buildJavaSourceCode() {

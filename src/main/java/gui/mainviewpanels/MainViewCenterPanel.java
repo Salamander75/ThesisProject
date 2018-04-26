@@ -124,7 +124,6 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
 
 
         addNewElement.setOnAction(e -> {
-       //     addNewElementItem();
             clearForm();
             removeElement.setVisible(false);
             elementModel = new ElementModel();
@@ -156,12 +155,6 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
                     setElementSelectorForm();
                     saveElement.setDisable(true);
                 }
-
-
-                // TODO: 1) Element name must be defined, else throw error.DONE
-                // TODO: 3) If no element is selected, throw error 4) If no elementSelector is selected, throw error
-                // TODO: 5) If empty selector is selected, throw error
-
                 clearForm();
             }
         });
@@ -208,7 +201,6 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
 
     @Override
     public void receiveElementObject(ElementModel model) {
-    ///    elementModel = model;
         setElementIdInput(iGeneratorService.removeDoubleQuotes(model.getId()));
         setElementClassInput(iGeneratorService.removeDoubleQuotes(model.getClassName()));
         setElementnameAttrInput(iGeneratorService.removeDoubleQuotes(model.getName()));

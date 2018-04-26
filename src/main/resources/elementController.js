@@ -130,14 +130,18 @@ function closeModal() {
 }
 
 function clearModal() {
-    var modalChildInputs = document.getElementById('someId').querySelectorAll('input');
+    var modalChildInputs = document.getElementById('elementViewModalBox').querySelectorAll('input');
+    var modalChildTds = document.getElementById('elementViewModalBox').querySelectorAll('.selectorInfoHolder');
     for(var i=0; i<modalChildInputs.length; i++) {
         modalChildInputs[i].value = '';
+    }
+    for(var j=0; j<modalChildTds.length; j++) {
+        modalChildTds[j].innerHTML = '';
     }
 }
 
 function initializeModalBoxes() {
-    var modalHtml = "<div id='someId' class='modal-content-main'>" +
+    var modalHtml = "<div id='elementViewModalBox' class='modal-content-main'>" +
         "<div class='modal-header-main'>" +
         "<button id='closeModalBox' onclick='closeModal()' class='close-modalbox-main'>&times;</button>" +
         "</div>"+
@@ -145,23 +149,23 @@ function initializeModalBoxes() {
         "<table>" +
         "<tr>" +
         "<td style='color: black'><label for='htmlElementId'>ID: </label></td>" +
-        "<td style='color: black' name='htmlElementId' id='htmlElementId'></td>" +
+        "<td style='color: black' name='htmlElementId' id='htmlElementId' class='selectorInfoHolder'></td>" +
         "</tr>"+
         "<tr>" +
         "<td style='color: black'><label for='htmlElementClass'>ClassName:</label></td>" +
-        "<td style='color: black' name='htmlElementClass' id='htmlElementClass'></td>" +
+        "<td style='color: black' name='htmlElementClass' id='htmlElementClass' class='selectorInfoHolder'></td>" +
         "</tr>"+
         "<tr>" +
         "<td style='color: black'><label for='htmlElementClass'>Name: </label></td>" +
-        "<td style='color: black' name='htmlElementName' id='htmlElementName'></td>" +
+        "<td style='color: black' name='htmlElementName' id='htmlElementName' class='selectorInfoHolder'></td>" +
         "</tr>"+
         "<tr>" +
         "<td style='color: black'><label for='htmlElementCssSelector'>CssSelector: </label></td>" +
-        "<td style='color: black' name='htmlElementCssSelector' id='htmlElementCssSelector'></td>" +
+        "<td style='color: black' name='htmlElementCssSelector' id='htmlElementCssSelector' class='selectorInfoHolder'></td>" +
         "</tr>" +
         "<tr>" +
         "<td style='color: black'><label for='htmlElementXPath'>XPath: </label></td>" +
-        "<td style='color: black' name='htmlElementXPath' id='htmlElementXPath'></td>" +
+        "<td style='color: black' name='htmlElementXPath' id='htmlElementXPath' class='selectorInfoHolder'></td>" +
         "</tr>" +
         "<tr>" +
         "<td><input type='hidden' name='hiddenElementId' id='hiddenElementId' /></td>" +
@@ -170,7 +174,7 @@ function initializeModalBoxes() {
         "<td><input type='hidden' name='hiddenElementSelector' id='hiddenElementSelector' /></td>" +
         "<td><input type='hidden' name='hiddenElementXPath' id='hiddenElementXPath' /></td>" +
         "<td><input type='hidden' name='elementTagName' id='elementTagName' /></td>" +
-        "<td><input type='text' name='elementTagType' id='elementTagType' /></td>" +
+        "<td><input type='hidden' name='elementTagType' id='elementTagType' /></td>" +
         "</tr>" +
         "<tr>" +
         "<td><button class='inspectionButton' onclick='createElementObject()'>Select</button></td>" +
