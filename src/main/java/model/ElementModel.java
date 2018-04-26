@@ -1,15 +1,13 @@
 package model;
 
 import javafx.scene.control.Hyperlink;
-import lombok.Data;
-
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Karl on 1.11.2017.
  */
-@Data
+
 public class ElementModel {
 
     private String elementUniqueName;

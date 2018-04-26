@@ -315,7 +315,6 @@ public class MainViewCenterPanel implements IMainViewCenterPanel {
         hyperlink.setOnMouseClicked( event -> {
             saveElement.setDisable(false);
             removeElement.setVisible(true);
-            System.out.println("Clicked");
             elementModel = linkedElementsHashMap.get(hyperlink.getText());
             setElementNameInput(elementModel.getElementUniqueName());
             setElementIdInput(iGeneratorService.removeDoubleQuotes(elementModel.getId()));

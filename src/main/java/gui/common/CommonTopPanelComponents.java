@@ -22,19 +22,6 @@ public class CommonTopPanelComponents {
         hbox.setStyle("-fx-background-color: #5f495f;");
         border.setTop(hbox);
 
-        // Menus
-        Menu fileMenu = new Menu("File");
-
-        MenuItem newFile = new MenuItem("New");
-
-        MenuItem exit = new MenuItem("Exit");
-        exit.setOnAction(e -> Platform.exit());
-
-        fileMenu.getItems().addAll(newFile, exit);
-
-        MenuBar menuBar = new MenuBar();
-        menuBar.getMenus().add(fileMenu);
-
         ButtonBar buttonBar = new ButtonBar();
 
         WebViewWindow webViewWindow = new WebViewWindow(webViewWindowStage);
@@ -52,7 +39,7 @@ public class CommonTopPanelComponents {
 
         buttonBar.getButtons().addAll(helpButton);
 
-        hbox.getChildren().addAll(menuBar, buttonBar, webView);
+        hbox.getChildren().addAll(buttonBar, webView);
         return hbox;
     }
 }

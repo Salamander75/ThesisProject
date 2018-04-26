@@ -27,10 +27,7 @@ import javafx.stage.Stage;
 import model.ElementModel;
 import netscape.javascript.JSObject;
 import service.DependencyClass;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.Scanner;
 
 /**
@@ -72,18 +69,16 @@ public class WebViewWindow {
 
             String javascript = "";
             toolbar = new HBox();
+            URL url = getClass().getResource("/elementController.js");
             try {
-                Scanner sc = new Scanner(new FileInputStream(new File("src/main/resources/elementController.js")));
+                Scanner sc = new Scanner(url.openStream());
                 while (sc.hasNext()) {
                     javascript += sc.nextLine() + "\n";
                 }
                 sc.close();
-
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            //       System.out.println(javascript);
             String script = "var getHeadTag = document.getElementsByTagName('head')[0];" +
                     "var newScriptTag = document.createElement('script');" +
                     "newScriptTag.type='text/javascript';" +
@@ -126,7 +121,7 @@ public class WebViewWindow {
             webEngine.setConfirmHandler(message -> showConfirm(message));
 
             backButton = new Button();
-            Image imageBack = new Image("file:src/main/resources/backIcon.png",10,10,true,true);
+            Image imageBack = new Image("/backIcon.png",10,10,true,true);
             backButton.setGraphic(new ImageView(imageBack));
             backButton.setDisable(true);
 
@@ -134,7 +129,7 @@ public class WebViewWindow {
                 goBackInHistory();
             });
 
-            Image imageForward = new Image("file:src/main/resources/forwardIcon.png", 10, 10, true, true);
+            Image imageForward = new Image("/forwardIcon.png", 10, 10, true, true);
             forwardButton = new Button();
             forwardButton.setGraphic(new ImageView(imageForward));
             forwardButton.setDisable(true);

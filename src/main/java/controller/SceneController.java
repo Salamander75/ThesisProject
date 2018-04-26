@@ -16,7 +16,7 @@ public class SceneController {
 
     public static void setCurrentScene(Scene scene) {
         currentScene = scene;
-        scene.getStylesheets().add("file:src/main/resources/generalStyle.css");
+        scene.getStylesheets().add("/generalStyle.css");
         primaryStage.setScene(currentScene);
         primaryStage.show();
     }
