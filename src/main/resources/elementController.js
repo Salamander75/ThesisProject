@@ -27,6 +27,8 @@
         documentBody.onmouseover = handler;
     }
 
+    /* The following code snippet is modified version from accepted answer here:
+     https://stackoverflow.com/questions/11010569/highlight-a-dom-element-on-mouse-over-like-inspect-does */
     function handler(event) {
         if (prev) {
             prev.className = prev.className.replace(/\bhighlight\b/, '');
@@ -39,7 +41,7 @@
     }
 
     function handleMouseClickEvent(e) {
-        if (pressedBoardKey == 17 && e.which == 1) {
+        if (pressedBoardKey === 17 && e.which === 1) {   // if left CTRL and left mouse is clicked together
             e.preventDefault();
             e.stopImmediatePropagation();
             openModalBox(e);

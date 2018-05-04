@@ -256,6 +256,7 @@ public class WebViewWindow {
         public void receiveUserSelection(String jsObject) {
             JsonParser parser = new JsonParser();
             JsonObject obj = parser.parse(jsObject).getAsJsonObject();
+            System.out.println(obj);
             ElementModel elementModel = DependencyClass.getMainViewCentralPanel().getCurrentElementModel();
             elementModel.setId(obj.get("id").toString());
             elementModel.setClassName(obj.get("className").toString());

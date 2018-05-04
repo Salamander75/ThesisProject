@@ -2,7 +2,6 @@ package gui.common;
 
 import gui.HelpModal;
 import gui.WebViewWindow;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -22,7 +21,6 @@ public class CommonTopPanelComponents {
         hbox.setStyle("-fx-background-color: #5f495f;");
         border.setTop(hbox);
 
-        ButtonBar buttonBar = new ButtonBar();
 
         WebViewWindow webViewWindow = new WebViewWindow(webViewWindowStage);
         Hyperlink webView = new Hyperlink("Webview");
@@ -34,12 +32,12 @@ public class CommonTopPanelComponents {
             }
         });
 
-        Button helpButton = new Button("Help");
-        helpButton.setOnAction(e -> HelpModal.display());
+        Hyperlink helpLink = new Hyperlink("Help");
+        helpLink.getStyleClass().add(topPanelComponentCssClass);
+        helpLink.setVisited(false);
+        helpLink.setOnAction(e -> HelpModal.display());
 
-        buttonBar.getButtons().addAll(helpButton);
-
-        hbox.getChildren().addAll(buttonBar, webView);
+        hbox.getChildren().addAll(helpLink, webView);
         return hbox;
     }
 }
