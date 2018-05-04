@@ -27,6 +27,11 @@
         documentBody.onmouseover = handler;
     }
 
+    window.onerror = function(msg, url, linenumber) {
+        alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+        return true;
+    }
+
     /* The following code snippet is modified version from accepted answer here:
      https://stackoverflow.com/questions/11010569/highlight-a-dom-element-on-mouse-over-like-inspect-does */
     function handler(event) {
@@ -121,6 +126,7 @@ function createElementObject() {
         +'"tagName" : "' + elementTagName + '",'
         +'"tagType" : "' + elementTagType + '"'
         +'}';
+
     setTimeout(function() {
         // we use timeout here, because sometimes there is a bug when data is not sent to front-end, but little delay resolves it
         gateway.receiveUserSelection(obj);
