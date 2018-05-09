@@ -344,6 +344,11 @@ function findSameTagOccuranceUnderParentNode(parentChildren, targetElement) {
     return elementOccuranceCounter;
 }
 
+/*
+The following xPath code is a modified version of answer from this thread:
+https://stackoverflow.com/questions/2631820/how-do-i-ensure-saved-click-coordinates-can-be-reloaed-to-the-same-place-even-i/2631931#2631931
+User who's answer has been modified: Scott Izu
+*/
 function generateElementXPath(element) {
     var elementTagName = element.tagName.toLowerCase();
     if (element.id && isElementIdUnique(element.id)) {
