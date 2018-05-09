@@ -42,6 +42,8 @@ public class WebViewWindow {
     private Button backButton;
     private Button forwardButton;
 
+    private String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36";
+
     private GateWay gateWay;
 
     public WebViewWindow(Stage stage) {
@@ -92,6 +94,7 @@ public class WebViewWindow {
 
 
             webEngine.setJavaScriptEnabled(true);
+            webEngine.setUserAgent(userAgent);
             webEngine.load("http://www.urbandead.com/");
             String finalScript = script;
             gateWay = new GateWay();
@@ -101,7 +104,7 @@ public class WebViewWindow {
                     if (t1 == Worker.State.SUCCEEDED) {
                         // this will be run as soon as WebView is initialized.
                         webEngine.executeScript(finalScript);
-                        System.out.println("OUTPOST");
+                        System.out.println(userAgent);
                         JSObject jsobj = (JSObject) webEngine.executeScript("window");
                         jsobj.setMember("gateway", gateWay);
                     }

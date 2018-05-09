@@ -14,6 +14,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         try {
+            System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
             launch(args);
         } catch (IllegalStateException e) {}
     }
