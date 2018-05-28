@@ -23,7 +23,7 @@ public class HelpModal {
         Text text2 = new Text("1) Press 'Add new' button: ");
         Text text3 = new Text("2) Open the Web View");
         Text text4 = new Text("3) Hover over the element, you wish to select (selected element is yellow)");
-        Text text5 = new Text("4) Modal opens about element selectors. Press 'Select'");
+        Text text5 = new Text("4) Click Left CTRL + Left Mouseclick. \nModal opens about element selectors. Press 'Select'");
         Text text6 = new Text("5) Main view form is filled with data. Here you can modify them \n and add element name. Also choose one selector type and press 'Save'");
         Text text7 = new Text("6) Repeat steps 1 - 5 until you no longer need any more elements");
         Text text8 = new Text("7) Enter Page Object name (at top of created web elements)");
