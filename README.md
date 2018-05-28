@@ -1,6 +1,5 @@
 # ThesisProject
 
-
 This is a prototype for Page Object Generator using Selenide framework. 
 
 Required software:
